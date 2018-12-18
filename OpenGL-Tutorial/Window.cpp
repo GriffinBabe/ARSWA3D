@@ -1,28 +1,14 @@
 #include "Window.h"
 #include "Controller.h"
 #include <iostream>
+#include <string>
+#include <fstream>
+#include <streambuf>
 
 unsigned int WIDTH = 600, HEIGHT = 600;
 
-const char *vertexShaderSource = 
-	"#version 330 core\n"
-	"layout (location = 0) in vec3 aPos;\n"
-	"void main()\n"
-	"{\n"
-	"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-	"}\0"; 
-
-const char *fragmentShaderSource = 
-	"#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-	"}\n\0";
-
 Window::Window()
 {
-	std::cout << "Window called" << std::endl;
 	/*
 	 * Initialises the Opengl and gives the version 3.3
 	*/
@@ -60,19 +46,21 @@ Window::Window()
 	}
 
 	// Initializes the shaders and installs them
-	this->init_shaders();
+	this->shader = new Shader("GLSL/tex_vertex_source1.c", "GLSL/tex_fragment_source1.c");
 
 	float vertices[] = {
-	 0.5f,  0.5f, 0.0f,
-	 0.5f, -0.5f, 0.0f,
-	-0.5f, -0.5f, 0.0f,
-	-0.5f,  0.5f, 0.0f
+		// positions          // colors           // texture coords
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
 	};
 	unsigned int indices[] = {
 	0, 1, 3,
 	1, 2, 3
 	};
-	this->triangle = new Triangle(12, 6, vertices, indices);
+
+	this->triangle = new Triangle(18, 3, vertices, indices);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //  Wireframe mode
 
@@ -82,6 +70,7 @@ Window::~Window() {
 	glfwTerminate();
 	// Closes all gl components after the end of the game_loop
 	delete this->triangle;
+	delete this->shader;
 }
 
 void Window::set_callback(Controller* ctrl)
@@ -112,21 +101,18 @@ void Window::game_loop() {
 		processInput(window);
 
 		// ... Redering commands here ... //
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor
 
 		// We specifies wich Shader we use to render our triangle
-		glUseProgram(shaderProgram); // We are using the shaders we build previously
-		glBindVertexArray(*this->triangle->getVAO()); // We bind those vertex we want to draw
-		// Only if we are not using EBO: glDrawArrays(GL_TRIANGLES, 0, 3);	// 1st arg: primitive type we want to draw
-																			// 2nd arg: starting index for drawing
-																			// 3rd arg: how many vertices we want to draw
+		this->shader->use();
 
-		glDrawElements(GL_TRIANGLES, this->triangle->get_indices_size(), GL_UNSIGNED_INT, 0);	// 1st arg: primite type we want to draw
-																// 2nd arg: 6 indices so 6 vertices to draw
-																// 3rd arg: type of indicies (unsigned int)
-																// 4th arg: EBO offset (so we start at the first element of the indicies array in this case)
-																// It takes the EBO bound to the VAO, and the VAO is currently bound with glBindVertexArray( vao );
+		float time = glfwGetTime();
+
+		//int vertexColorLocation = glGetUniformLocation(this->shader->program_ID, "ourColor"); // Gets the ID of the uniform variable that is our coloration in this case
+		//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f); // With our ID we get the uniform variable, and we change the values
+
+		this->triangle->render();
 
 		glfwSwapBuffers(window); // Swamp the buffer to the window, there are two buffers: one that is rendering and one from the previous frame that already rendered, 
 								 // we want to show the already rendered one to avoid flickering!
@@ -134,51 +120,27 @@ void Window::game_loop() {
 	}
 }
 
-void Window::init_shaders()
-{
-	// Initializes the shaders
-
-	int succ;
-	char infoLog[512];
-
-	vertexShader = glCreateShader(GL_VERTEX_SHADER); // Creates a shader and returns the id of the shader. Since we're creating a vertex shader we pass in GL_VERTEX_SHADER.
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL); // Takes the source code
-	glCompileShader(vertexShader); // Compiles the shader with the id as vertexShader
-
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &succ); // Checks if the compilation SUCC'd
-	if (!succ) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER); // We do the same for the fragment shader, wich gives the color of the pixels
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &succ); // Checks if the compilation SUCC'd
-	if (!succ) {
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	shaderProgram = glCreateProgram(); // A shader program object is the final linked version of multiple shaders combined
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &succ);
-	if (!succ) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-
-	}
-
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
-}
-
 void Window::key_callback_thunk(GLFWwindow * glwindow, int key, int scancode, int action, int mods)
 {
 	auto self = static_cast<Controller*>(glfwGetWindowUserPointer(glwindow));
 	self->key_callback(glwindow, key, scancode, action, mods);
+}
+
+std::string Window::glsl_reader(std::string filePath) {
+	std::string content;
+	std::ifstream fileStream(filePath, std::ios::in);
+
+	if (!fileStream.is_open()) {
+		std::cerr << "Could not read file " << filePath << ". File does not exist." << std::endl;
+		return "";
+	}
+
+	std::string line = "";
+	while (!fileStream.eof()) {
+		std::getline(fileStream, line);
+		content.append(line + "\n");
+	}
+
+	fileStream.close();
+	return content;
 }
