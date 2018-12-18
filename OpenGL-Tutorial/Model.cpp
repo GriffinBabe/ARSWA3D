@@ -1,3 +1,5 @@
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 #include "Model.h"
 #include <glad/glad.h>
 
@@ -36,6 +38,7 @@ Model::Model(int vertices_size, int indices_size, float v[], unsigned int i[]) :
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size * sizeof(unsigned int), indices, GL_STATIC_DRAW); // Just need to change the type to ELEMENT_ARRAY_BUFFER
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0); // We say how to use the array
+	glEnableVertexAttribArray(0);
 	/*
 		The first parameter specifies which vertex attribute we want to configure. Remember that we specified the location of the position vertex attribute in the vertex shader with layout (location = 0) in GLSL files.
 		This sets the location of the vertex attribute to 0 and since we want to pass data to this vertex attribute, we pass in 0.
@@ -45,16 +48,17 @@ Model::Model(int vertices_size, int indices_size, float v[], unsigned int i[]) :
 		The fifth argument is known as the stride and tells us the space between consecutive vertex attributes
 		6th This is the offset of where the position data begins in the buffer. Since the position data is at the start of the data array this value is just 0.
 	*/
-	glEnableVertexAttribArray(0);
+
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))); // We do the same for another layout of informations, this time the color
 	glEnableVertexAttribArray(1);
+
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))); // We create another layer for our shading program with the texture coordinates
+	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbinds the buffer once done
 	glBindVertexArray(0); // We unbind the vertex array (our VAO) so we can bind it later for another object
 
 
-	int width, height, nrChannels; // number of color channels
-	unsigned char* data = stbi_load("Textures/container.jpg", &width, &height, &nrChannels, 0); // loads the texture into a char array of bytes
 
 	glGenTextures(1, &texture); // creates an ID for a new texture
 	glBindTexture(GL_TEXTURE_2D, texture); // so the next instructions will be referrend to this texture
@@ -81,12 +85,15 @@ Model::Model(int vertices_size, int indices_size, float v[], unsigned int i[]) :
 
 	// Mimaps: we store multiple copies of the same texture but with different dimensions so we can apply more little textures for farest models and bigger for closest one
 	// There is GL_NEAREST_MIPMAP_NEAREST, GL_LINEAR_MIMAP_NEAREST, GL_NEAREST_MIPMAP_LINEAR, GL_LINEAR_MIMAP_LINEAR
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	// Mipmapping for magnifying has no effect so do not use it
 
 	// <-------------------------- End of currently bound Texture parameters --------------------------------->
+
+	int width, height, nrChannels; // number of color channels
+	unsigned char* data = stbi_load("Textures/container.jpg", &width, &height, &nrChannels, 0); // loads the texture into a char array of bytes
 
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -107,8 +114,6 @@ Model::Model(int vertices_size, int indices_size, float v[], unsigned int i[]) :
 
 	stbi_image_free(data); // Memory optimisation
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))); // We create another layer for our shading program with the texture coordinates
-	glEnableVertexAttribArray(2);
 
 
 	std::cout << "Model Initialized with a VBO and a EBO bound to a VAO" << std::endl;
@@ -140,10 +145,14 @@ void Model::render()
 		// Only if we are not using EBO: glDrawArrays(GL_TRIANGLES, 0, 3);	// 1st arg: primitive type we want to draw
 																			// 2nd arg: starting index for drawing
 																			// 3rd arg: how many vertices we want to draw
-
 	glDrawElements(GL_TRIANGLES, indices_size, GL_UNSIGNED_INT, 0);	// 1st arg: primite type we want to draw
 															// 2nd arg: 6 indices so 6 vertices to draw
 															// 3rd arg: type of indicies (unsigned int)
 															// 4th arg: EBO offset (so we start at the first element of the indicies array in this case)
 															// It takes the EBO bound to the VAO, and the VAO is currently bound with glBindVertexArray( vao );
+}
+
+void Model::bind_texture()
+{
+	glBindTexture(GL_TEXTURE_2D, texture);
 }

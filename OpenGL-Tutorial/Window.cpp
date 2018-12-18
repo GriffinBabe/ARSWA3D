@@ -60,7 +60,7 @@ Window::Window()
 	1, 2, 3
 	};
 
-	this->triangle = new Triangle(18, 3, vertices, indices);
+	this->triangle = new Triangle(sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof (unsigned int), vertices, indices);
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //  Wireframe mode
 
@@ -104,11 +104,12 @@ void Window::game_loop() {
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor
 
+		this->triangle->bind_texture();
+
 		// We specifies wich Shader we use to render our triangle
 		this->shader->use();
 
-		float time = glfwGetTime();
-
+		//float time = glfwGetTime();
 		//int vertexColorLocation = glGetUniformLocation(this->shader->program_ID, "ourColor"); // Gets the ID of the uniform variable that is our coloration in this case
 		//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f); // With our ID we get the uniform variable, and we change the values
 

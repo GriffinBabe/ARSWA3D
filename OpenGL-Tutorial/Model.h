@@ -1,7 +1,5 @@
 #pragma once
 
-#define STB_IMAGE_IMPLEMENTATION //Used so the stb_image uses relevant code and works like a .cpp file
-#include "stb_image.h" // Image loader library
 #include <memory>
 #include <iostream>
 
@@ -15,6 +13,7 @@ public:
 	int get_indices_size();
 
 	void render();
+	void bind_texture();
 
 protected:
 	unsigned int VBO = 0;
