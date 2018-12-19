@@ -2,9 +2,10 @@
 #include "stb_image.h"
 #include "Model.h"
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 
-Model::Model(int vertices_size, int indices_size, float v[], unsigned int i[]) : vertices_size(vertices_size), indices_size(indices_size)
+Model::Model(Shader* shader, int vertices_size, int indices_size, float v[], unsigned int i[]) : vertices_size(vertices_size), indices_size(indices_size), shader(shader)
 {
 	// WARNING : v is only the pointer to the first element of the array
 
@@ -93,11 +94,13 @@ Model::Model(int vertices_size, int indices_size, float v[], unsigned int i[]) :
 	// <-------------------------- End of currently bound Texture parameters --------------------------------->
 
 	int width, height, nrChannels; // number of color channels
+	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 	unsigned char* data = stbi_load("Textures/container.jpg", &width, &height, &nrChannels, 0); // loads the texture into a char array of bytes
 
 	if (data) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 		/*
+			Loads the texture to the currently bound texture
 			1st arg: target texture type
 			2nd arg: mimaplevel, 0 is the base level (the mimap is automaticly created by OpenGL)
 			3rd arg: what kind of format
@@ -114,9 +117,24 @@ Model::Model(int vertices_size, int indices_size, float v[], unsigned int i[]) :
 
 	stbi_image_free(data); // Memory optimisation
 
+	// You can bind multiple textures that you will use in the shader files
 
+	glGenTextures(1, &texture2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
 
-	std::cout << "Model Initialized with a VBO and a EBO bound to a VAO" << std::endl;
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	data = stbi_load("Textures/awesomeface.png", &width, &height, &nrChannels, 0);
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); // to the currently bound texture
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	stbi_image_free(data);
+
 }
 
 Model::~Model()
@@ -124,8 +142,8 @@ Model::~Model()
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &EBO);
 	glDeleteBuffers(1, &VBO);
-	delete vertices;
-	delete indices;
+	delete[] this->vertices;
+	delete[] this->indices;
 }
 
 unsigned int * Model::getVAO()
@@ -140,7 +158,20 @@ int Model::get_indices_size()
 
 void Model::render()
 {
-	glBindTexture(GL_TEXTURE_2D, texture);
+	this->bind_texture();
+
+	float time = glfwGetTime();
+	float angle = sin(time * 5) * 90.0f;
+
+	glm::mat4 trans;
+	trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0, 1.0, 0.0));
+	//trans = glm::translate(trans, glm::vec3(0.0, 0.5, 0.0));
+	trans = glm::scale(trans, glm::vec3(1.2, 1.2, 1.2));
+
+	this->shader->setMatrix4f("transform",trans);
+
+
+
 	glBindVertexArray(VAO); // We bind those vertex we want to draw
 		// Only if we are not using EBO: glDrawArrays(GL_TRIANGLES, 0, 3);	// 1st arg: primitive type we want to draw
 																			// 2nd arg: starting index for drawing
@@ -154,5 +185,11 @@ void Model::render()
 
 void Model::bind_texture()
 {
+	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+
+	this->shader->setInt("texture1", 0); // texture 1 is GL_TEXTURE_0
+	this->shader->setInt("texture2", 1); // texture 2 is GL_TEXTURE_1
 }

@@ -2,9 +2,8 @@
 #include <glad/glad.h>
 #include <stdexcept>
 
-Triangle::Triangle(int vertices_size, int indices_size, float v[], unsigned int i[]) : Model(vertices_size,indices_size,v,i)
+Triangle::Triangle(Shader* shader, int vertices_size, int indices_size, float v[], unsigned int i[]) : Model(shader,vertices_size,indices_size,v,i)
 {
-	std::cout << "Triangle initialized" << std::endl;
 }
 
 

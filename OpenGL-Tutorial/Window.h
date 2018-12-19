@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "Triangle.h"
 #include "Shader.h"
+#include <vector>
 
 class Controller;
 
@@ -16,13 +17,11 @@ public:
 	void set_callback(Controller* ctrl);
 	void game_loop();
 
-	Triangle* getTriangle();
-
 private:
 	GLFWwindow* window;
 	Shader* shader;
 
-	Triangle* triangle;
+	std::vector<Model*>* models;
 
 	bool kill_pill = false;
 

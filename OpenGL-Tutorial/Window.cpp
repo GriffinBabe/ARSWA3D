@@ -45,6 +45,8 @@ Window::Window()
 		exit(-1);
 	}
 
+	this->models = new std::vector<Model*>();
+
 	// Initializes the shaders and installs them
 	this->shader = new Shader("GLSL/tex_vertex_source1.c", "GLSL/tex_fragment_source1.c");
 
@@ -54,14 +56,25 @@ Window::Window()
 		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
 		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
 		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-	};
+	};	
 	unsigned int indices[] = {
 	0, 1, 3,
 	1, 2, 3
 	};
 
-	this->triangle = new Triangle(sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof (unsigned int), vertices, indices);
+	//float vertices2[] = {
+	//	// positions          // colors           // texture coords
+	//	 0.6f,  0.5f, 0.4f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+	//	 0.6f, -0.5f, 0.4f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+	//	-0.4f, -0.5f, 0.4f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+	//	-0.4f,  0.5f, 0.4f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+	//};	
+	//unsigned int indices2[] = {
+	//0, 1, 3,
+	//1, 2, 3
+	//};
 
+	this->models->push_back(new Triangle(this->shader, sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof(unsigned int), vertices, indices));
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //  Wireframe mode
 
 }
@@ -69,7 +82,6 @@ Window::Window()
 Window::~Window() {
 	glfwTerminate();
 	// Closes all gl components after the end of the game_loop
-	delete this->triangle;
 	delete this->shader;
 }
 
@@ -77,11 +89,6 @@ void Window::set_callback(Controller* ctrl)
 {
 	glfwSetWindowUserPointer(this->window, ctrl);
 	glfwSetKeyCallback(this->window, key_callback_thunk);
-}
-
-Triangle * Window::getTriangle()
-{
-	return triangle;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -104,16 +111,17 @@ void Window::game_loop() {
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor
 
-		this->triangle->bind_texture();
-
-		// We specifies wich Shader we use to render our triangle
-		this->shader->use();
 
 		//float time = glfwGetTime();
 		//int vertexColorLocation = glGetUniformLocation(this->shader->program_ID, "ourColor"); // Gets the ID of the uniform variable that is our coloration in this case
 		//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f); // With our ID we get the uniform variable, and we change the values
-
-		this->triangle->render();
+		std::cout << this->models->size() << std::endl;
+		for (Model* md : *this->models) {
+			md->bind_texture();
+			// We specifies wich Shader we use to render our triangle
+			this->shader->use();
+			md->render();
+		}
 
 		glfwSwapBuffers(window); // Swamp the buffer to the window, there are two buffers: one that is rendering and one from the previous frame that already rendered, 
 								 // we want to show the already rendered one to avoid flickering!

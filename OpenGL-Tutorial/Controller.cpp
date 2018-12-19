@@ -17,7 +17,6 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 	if (action == GLFW_PRESS) {
 		switch (key) {
 			case GLFW_KEY_UP:	std::cout << "key up called" << std::endl;
-								this->window->getTriangle()->changeDepht(0.5);
 								break;
 		}
 	}
