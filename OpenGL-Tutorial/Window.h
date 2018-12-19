@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include "Triangle.h"
 #include "Shader.h"
+#include "Camera.h"
 #include <vector>
 
 class Controller;
@@ -20,10 +21,12 @@ public:
 private:
 	GLFWwindow* window;
 	Shader* shader;
+	Camera* camera;
 
 	std::vector<Model*>* models;
 
 	bool kill_pill = false;
+	bool print_fps = false;
 
 	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 	void processInput(GLFWwindow* window);

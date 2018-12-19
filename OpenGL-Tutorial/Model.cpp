@@ -5,7 +5,8 @@
 #include <GLFW/glfw3.h>
 
 
-Model::Model(Shader* shader, int vertices_size, int indices_size, float v[], unsigned int i[]) : vertices_size(vertices_size), indices_size(indices_size), shader(shader)
+Model::Model(glm::vec3 pos, glm::vec3 rot, Shader* shader, int vertices_size, int indices_size, float v[], unsigned int i[]) : position(pos), rotation(rot),
+	vertices_size(vertices_size), indices_size(indices_size), shader(shader)
 {
 	// WARNING : v is only the pointer to the first element of the array
 
@@ -38,7 +39,7 @@ Model::Model(Shader* shader, int vertices_size, int indices_size, float v[], uns
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // again, the parameters needs to be passed between a bind and an unbind, here we bind to the vertices array
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_size * sizeof(unsigned int), indices, GL_STATIC_DRAW); // Just need to change the type to ELEMENT_ARRAY_BUFFER
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0); // We say how to use the array
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0); // We say how to use the array
 	glEnableVertexAttribArray(0);
 	/*
 		The first parameter specifies which vertex attribute we want to configure. Remember that we specified the location of the position vertex attribute in the vertex shader with layout (location = 0) in GLSL files.
@@ -50,11 +51,8 @@ Model::Model(Shader* shader, int vertices_size, int indices_size, float v[], uns
 		6th This is the offset of where the position data begins in the buffer. Since the position data is at the start of the data array this value is just 0.
 	*/
 
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))); // We do the same for another layout of informations, this time the color
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))); // We create another layer for our shading program with the texture coordinates
 	glEnableVertexAttribArray(1);
-
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))); // We create another layer for our shading program with the texture coordinates
-	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0); // Unbinds the buffer once done
 	glBindVertexArray(0); // We unbind the vertex array (our VAO) so we can bind it later for another object
@@ -160,15 +158,19 @@ void Model::render()
 {
 	this->bind_texture();
 
-	float time = glfwGetTime();
-	float angle = sin(time * 5) * 90.0f;
+	// Vclip = Mprojection.Mview.Mmodel.Vlocal
+		// Vlocal is the array of vertices, that are based around a central point
+		// Mmodel is the transformation to world coordinates
+		// Mview is the transformation for the camera
+		// Mprojection
 
-	glm::mat4 trans;
-	trans = glm::rotate(trans, glm::radians(angle), glm::vec3(0.0, 1.0, 0.0));
-	//trans = glm::translate(trans, glm::vec3(0.0, 0.5, 0.0));
-	trans = glm::scale(trans, glm::vec3(1.2, 1.2, 1.2));
-
-	this->shader->setMatrix4f("transform",trans);
+	glm::mat4 model;
+	model = glm::translate(model, position);	
+	model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+	model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+	model = glm::rotate(model, 3 * (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	this->shader->setMatrix4f("model",model);
 
 
 
@@ -176,11 +178,12 @@ void Model::render()
 		// Only if we are not using EBO: glDrawArrays(GL_TRIANGLES, 0, 3);	// 1st arg: primitive type we want to draw
 																			// 2nd arg: starting index for drawing
 																			// 3rd arg: how many vertices we want to draw
-	glDrawElements(GL_TRIANGLES, indices_size, GL_UNSIGNED_INT, 0);	// 1st arg: primite type we want to draw
-															// 2nd arg: 6 indices so 6 vertices to draw
-															// 3rd arg: type of indicies (unsigned int)
-															// 4th arg: EBO offset (so we start at the first element of the indicies array in this case)
-															// It takes the EBO bound to the VAO, and the VAO is currently bound with glBindVertexArray( vao );
+	//glDrawElements(GL_TRIANGLES, indices_size, GL_UNSIGNED_INT, 0);	// 1st arg: primite type we want to draw
+	//														// 2nd arg: 6 indices so 6 vertices to draw
+	//														// 3rd arg: type of indicies (unsigned int)
+	//														// 4th arg: EBO offset (so we start at the first element of the indicies array in this case)
+	//														// It takes the EBO bound to the VAO, and the VAO is currently bound with glBindVertexArray( vao );
+	glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void Model::bind_texture()
@@ -192,4 +195,9 @@ void Model::bind_texture()
 
 	this->shader->setInt("texture1", 0); // texture 1 is GL_TEXTURE_0
 	this->shader->setInt("texture2", 1); // texture 2 is GL_TEXTURE_1
+}
+
+glm::vec3 Model::get_position()
+{
+	return position;
 }

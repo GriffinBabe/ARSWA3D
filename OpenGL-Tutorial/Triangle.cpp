@@ -2,7 +2,8 @@
 #include <glad/glad.h>
 #include <stdexcept>
 
-Triangle::Triangle(Shader* shader, int vertices_size, int indices_size, float v[], unsigned int i[]) : Model(shader,vertices_size,indices_size,v,i)
+Triangle::Triangle(glm::vec3 pos, glm::vec3 rot, Shader* shader, int vertices_size, int indices_size, float v[], unsigned int i[]) :
+	Model(pos,rot,shader,vertices_size,indices_size,v,i)
 {
 }
 

@@ -49,32 +49,66 @@ Window::Window()
 
 	// Initializes the shaders and installs them
 	this->shader = new Shader("GLSL/tex_vertex_source1.c", "GLSL/tex_fragment_source1.c");
+	this->camera = new Camera(this->shader);
+	glEnable(GL_DEPTH_TEST); // opengl's Z buffer used so things that are behind others aren't rendered
 
-	float vertices[] = {
-		// positions          // colors           // texture coords
-		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-	};	
+	//float vertices[] = {
+	//	// positions          // colors           // texture coords
+	//	 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+	//	 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+	//	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+	//	-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+	//};	
 	unsigned int indices[] = {
 	0, 1, 3,
 	1, 2, 3
 	};
+	float vertices[] = {
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
 
-	//float vertices2[] = {
-	//	// positions          // colors           // texture coords
-	//	 0.6f,  0.5f, 0.4f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-	//	 0.6f, -0.5f, 0.4f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-	//	-0.4f, -0.5f, 0.4f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-	//	-0.4f,  0.5f, 0.4f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-	//};	
-	//unsigned int indices2[] = {
-	//0, 1, 3,
-	//1, 2, 3
-	//};
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
 
-	this->models->push_back(new Triangle(this->shader, sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof(unsigned int), vertices, indices));
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
+	this->models->push_back(new Triangle(glm::vec3(0.0f,0.0f,-2.0f), glm::vec3(), this->shader, sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof(unsigned int), vertices, indices));
+	this->models->push_back(new Triangle(glm::vec3(2.0f,0.0f,-3.0f), glm::vec3(), this->shader, sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof(unsigned int), vertices, indices));
+	this->models->push_back(new Triangle(glm::vec3(2.0f,2.0f,-1.0f), glm::vec3(), this->shader, sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof(unsigned int), vertices, indices));
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //  Wireframe mode
 
 }
@@ -104,22 +138,34 @@ void Window::processInput(GLFWwindow* window) {
 }
 
 void Window::game_loop() {
+	float last_time = glfwGetTime();
+	unsigned int nbFrames = 0;
 	while (!glfwWindowShouldClose(window) || kill_pill) { // Checks if the window has received the instruction to close or another thread from this program activated the kill_pill
+		double currentTime = glfwGetTime();
+		nbFrames++;
+		if (currentTime - last_time >= 1.0) { // If last prinf() was more than 1 sec ago
+			if (print_fps) {
+				printf("%f FPS\n", double(nbFrames));
+			}
+			nbFrames = 0;
+			last_time += 1.0;
+		}
+
 		processInput(window);
 
 		// ... Redering commands here ... //
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClearColor(0.19f, 0.54f, 0.62f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor
 
 
 		//float time = glfwGetTime();
 		//int vertexColorLocation = glGetUniformLocation(this->shader->program_ID, "ourColor"); // Gets the ID of the uniform variable that is our coloration in this case
 		//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f); // With our ID we get the uniform variable, and we change the values
-		std::cout << this->models->size() << std::endl;
+		this->shader->use();
+		this->camera->set_matrices();
 		for (Model* md : *this->models) {
-			md->bind_texture();
 			// We specifies wich Shader we use to render our triangle
-			this->shader->use();
 			md->render();
 		}
 
