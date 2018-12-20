@@ -16,7 +16,10 @@ public:
 	~Window();
 
 	void set_callback(Controller* ctrl);
+	void set_mouse_callback(Controller* ctrl);
 	void game_loop();
+
+	Camera* getCamera();
 
 private:
 	GLFWwindow* window;
@@ -32,6 +35,7 @@ private:
 	void processInput(GLFWwindow* window);
 
 	static void key_callback_thunk(GLFWwindow* glwindow, int key, int scancode, int action, int mods);
+	static void mouse_callback_thunk(GLFWwindow* glwindow, double xpos, double ypos);
 
 	std::string glsl_reader(std::string filePath);
 

@@ -169,7 +169,7 @@ void Model::render()
 	model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-	model = glm::rotate(model, 3 * (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//model = glm::rotate(model, 3 * (float)glfwGetTime() * glm::radians(50.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	this->shader->setMatrix4f("model",model);
 
 

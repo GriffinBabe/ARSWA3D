@@ -125,6 +125,12 @@ void Window::set_callback(Controller* ctrl)
 	glfwSetKeyCallback(this->window, key_callback_thunk);
 }
 
+void Window::set_mouse_callback(Controller * ctrl)
+{
+	glfwSetWindowUserPointer(this->window, ctrl);
+	glfwSetCursorPosCallback(this->window, mouse_callback_thunk);
+}
+
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 void Window::framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
@@ -175,10 +181,21 @@ void Window::game_loop() {
 	}
 }
 
+Camera * Window::getCamera()
+{
+	return this->camera;
+}
+
 void Window::key_callback_thunk(GLFWwindow * glwindow, int key, int scancode, int action, int mods)
 {
 	auto self = static_cast<Controller*>(glfwGetWindowUserPointer(glwindow));
 	self->key_callback(glwindow, key, scancode, action, mods);
+}
+
+void Window::mouse_callback_thunk(GLFWwindow * glwindow, double xpos, double ypos)
+{
+	auto self = static_cast<Controller*>(glfwGetWindowUserPointer(glwindow));
+	self->mouse_callback(glwindow, xpos, ypos);
 }
 
 std::string Window::glsl_reader(std::string filePath) {
