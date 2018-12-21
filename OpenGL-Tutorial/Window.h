@@ -2,9 +2,9 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "Triangle.h"
 #include "Shader.h"
 #include "Camera.h"
+#include "Model.h"
 #include <vector>
 
 class Controller;
@@ -26,7 +26,7 @@ private:
 	Shader* shader;
 	Camera* camera;
 
-	std::vector<Model*>* models;
+	std::vector<Model> models;
 
 	bool kill_pill = false;
 	bool print_fps = false;

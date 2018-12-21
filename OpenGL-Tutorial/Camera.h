@@ -22,12 +22,15 @@ public:
 	void change_yaw_offset(float dy);
 	void change_pitch_offset(float dp);
 
+	void set_sprint(bool sprint);
+
 private:
 	glm::mat4 view;
 	glm::mat4 projection;
 
 	
 	glm::vec3 position;
+	glm::vec3 worldUp;
 	glm::vec3 cameraUp;
 	glm::vec3 cameraRight;
 	glm::vec3 cameraFront;
@@ -38,7 +41,6 @@ private:
 	float dx = 0, dz = 0;
 	float delta_time = 0;
 	float last_frame = 0;
-
 
 
 	Shader* shader;

@@ -7,7 +7,7 @@
 
 unsigned int WIDTH = 600, HEIGHT = 600;
 
-Window::Window()
+Window::Window() : models(std::vector<Model>())
 {
 	/*
 	 * Initialises the Opengl and gives the version 3.3
@@ -45,72 +45,10 @@ Window::Window()
 		exit(-1);
 	}
 
-	this->models = new std::vector<Model*>();
-
 	// Initializes the shaders and installs them
-	this->shader = new Shader("GLSL/tex_vertex_source1.c", "GLSL/tex_fragment_source1.c");
+	this->shader = new Shader("GLSL/multiple_vertex_source.c", "GLSL/multiple_fragment_source.c");
 	this->camera = new Camera(this->shader);
 	glEnable(GL_DEPTH_TEST); // opengl's Z buffer used so things that are behind others aren't rendered
-
-	//float vertices[] = {
-	//	// positions          // colors           // texture coords
-	//	 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
-	//	 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
-	//	-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
-	//	-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
-	//};	
-	unsigned int indices[] = {
-	0, 1, 3,
-	1, 2, 3
-	};
-	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-	};
-	this->models->push_back(new Triangle(glm::vec3(0.0f,0.0f,-2.0f), glm::vec3(), this->shader, sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof(unsigned int), vertices, indices));
-	this->models->push_back(new Triangle(glm::vec3(2.0f,0.0f,-3.0f), glm::vec3(), this->shader, sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof(unsigned int), vertices, indices));
-	this->models->push_back(new Triangle(glm::vec3(2.0f,2.0f,-1.0f), glm::vec3(), this->shader, sizeof(vertices) / sizeof(float), sizeof(indices) / sizeof(unsigned int), vertices, indices));
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //  Wireframe mode
-
 }
 
 Window::~Window() {
@@ -127,6 +65,7 @@ void Window::set_callback(Controller* ctrl)
 
 void Window::set_mouse_callback(Controller * ctrl)
 {
+	glfwSetInputMode(this->window, GLFW_CURSOR_DISABLED, 0);
 	glfwSetWindowUserPointer(this->window, ctrl);
 	glfwSetCursorPosCallback(this->window, mouse_callback_thunk);
 }
@@ -170,7 +109,7 @@ void Window::game_loop() {
 		//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f); // With our ID we get the uniform variable, and we change the values
 		this->shader->use();
 		this->camera->set_matrices();
-		for (Model* md : *this->models) {
+		for (Model md : models) {
 			// We specifies wich Shader we use to render our triangle
 			md->render();
 		}
