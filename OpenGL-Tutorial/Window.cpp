@@ -111,7 +111,7 @@ void Window::game_loop() {
 		this->camera->set_matrices();
 		for (Model md : models) {
 			// We specifies wich Shader we use to render our triangle
-			md->render();
+			md.draw(this->shader);
 		}
 
 		glfwSwapBuffers(window); // Swamp the buffer to the window, there are two buffers: one that is rendering and one from the previous frame that already rendered, 

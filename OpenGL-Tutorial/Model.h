@@ -10,7 +10,7 @@ public:
 
 	std::vector<Texture> textures_loaded;
 	std::vector<Mesh> meshes;
-	std::string directory;
+	//std::string directory;
 	bool gammaCorrection;
 
 	Model(char *path);
@@ -18,6 +18,8 @@ public:
 
 private:
 	std::string directory;
+
+	unsigned int TextureFromFile(std::string path, std::string directory);
 
 	void loadModel(std::string path);
 	void processNode(aiNode *node, const aiScene *scene);
