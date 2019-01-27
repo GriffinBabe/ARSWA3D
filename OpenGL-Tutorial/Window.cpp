@@ -25,7 +25,7 @@ Window::Window() : models(std::vector<Model>())
 	/*
 	Initializes the window and checks if it has been build correctly
 	*/
-	this->window = glfwCreateWindow(WIDTH, HEIGHT, "GriffinBabe is learning OpenGL", NULL, NULL);
+	this->window = glfwCreateWindow(WIDTH, HEIGHT, "ARSWA Rem.", NULL, NULL);
 	if (this->window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -45,8 +45,10 @@ Window::Window() : models(std::vector<Model>())
 		exit(-1);
 	}
 
+	models.push_back(Model("Models/cube/cube.obj"));
+
 	// Initializes the shaders and installs them
-	this->shader = new Shader("GLSL/multiple_vertex_source.c", "GLSL/multiple_fragment_source.c");
+	this->shader = new Shader("GLSL/multiple_vertex_source.c", "GLSL/model_loading.c");
 	this->camera = new Camera(this->shader);
 	glEnable(GL_DEPTH_TEST); // opengl's Z buffer used so things that are behind others aren't rendered
 }
@@ -65,7 +67,7 @@ void Window::set_callback(Controller* ctrl)
 
 void Window::set_mouse_callback(Controller * ctrl)
 {
-	glfwSetInputMode(this->window, GLFW_CURSOR_DISABLED, 0);
+	glfwSetInputMode(this->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetWindowUserPointer(this->window, ctrl);
 	glfwSetCursorPosCallback(this->window, mouse_callback_thunk);
 }
@@ -109,6 +111,7 @@ void Window::game_loop() {
 		//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f); // With our ID we get the uniform variable, and we change the values
 		this->shader->use();
 		this->camera->set_matrices();
+
 		for (Model md : models) {
 			// We specifies wich Shader we use to render our triangle
 			md.draw(this->shader);

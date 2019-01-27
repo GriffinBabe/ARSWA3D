@@ -13,7 +13,8 @@ public:
 	//std::string directory;
 	bool gammaCorrection;
 
-	Model(char *path);
+	Model();
+	Model(std::string path);
 	void draw(Shader* shader);
 
 private:
@@ -25,6 +26,6 @@ private:
 	void processNode(aiNode *node, const aiScene *scene);
 	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
-											  std::string name);
+											  std::string TypeName);
 
 };
