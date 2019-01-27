@@ -1,0 +1,9 @@
+.vs/
+Debug/
+Release/
+OpenGL-Tutorial/Debug
+OpenGL-Tutorial/Release
+OpenGL-Tutorial/OpenGL-Tutorial.vcxproj
+OpenGL-Tutorial/OpenGL-Tutorial.vcxproj.filters
+OpenGL-Tutorial/OpenGL-Tutorial.vcxproj.user
+
