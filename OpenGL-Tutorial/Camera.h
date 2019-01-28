@@ -26,6 +26,9 @@ public:
 
 	void set_sprint(bool sprint);
 
+	void adapt_perspective(GLFWwindow* window);
+	void switch_free();
+
 private:
 	glm::mat4 view;
 	glm::mat4 projection;
@@ -44,8 +47,10 @@ private:
 	float delta_time = 0;
 	float last_frame = 0;
 
+	bool free = false;
 
 	Shader* shader;
+
 };
 
 #endif // !CAMERA_H

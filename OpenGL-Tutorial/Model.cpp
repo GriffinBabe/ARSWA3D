@@ -23,7 +23,11 @@ void Model::draw(Shader * shader)
 {
 	glm::mat4 model = glm::mat4(1.0f);
 	if (entity != nullptr) {
-		model = glm::translate(model, glm::vec3(this->entity->x, 0.0f, this->entity->y));
+		model = glm::translate(model, glm::vec3(this->entity->x, this->entity->y, this->entity->z));
+		model = glm::rotate(model, glm::radians(this->entity->rotX), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(this->entity->rotY), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, glm::radians(this->entity->rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::scale(model, glm::vec3(this->entity->scaleX, this->entity->scaleY, this->entity->scaleZ));
 	}
 	else {
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));

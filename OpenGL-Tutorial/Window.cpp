@@ -4,8 +4,10 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
+#include <chrono>
+#include <thread>
 
-unsigned int WIDTH = 600, HEIGHT = 600;
+unsigned int WIDTH = 1280, HEIGHT = 720, FPS_CAP = 60;
 
 Window::Window() : models(std::vector<Model>())
 {
@@ -50,6 +52,7 @@ Window::Window() : models(std::vector<Model>())
 	// Initializes the shaders and installs them
 	this->shader = new Shader("GLSL/multiple_vertex_source.c", "GLSL/model_loading.c");
 	this->camera = new Camera(this->shader);
+	this->camera->adapt_perspective(this->window);
 	glEnable(GL_DEPTH_TEST); // opengl's Z buffer used so things that are behind others aren't rendered
 }
 
@@ -113,10 +116,6 @@ void Window::game_loop() {
 		glClearColor(0.19f, 0.54f, 0.62f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor
 
-
-		//float time = glfwGetTime();
-		//int vertexColorLocation = glGetUniformLocation(this->shader->program_ID, "ourColor"); // Gets the ID of the uniform variable that is our coloration in this case
-		//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f); // With our ID we get the uniform variable, and we change the values
 		this->shader->use();
 		this->camera->set_matrices();
 
@@ -127,15 +126,25 @@ void Window::game_loop() {
 		
 		//std::cout << this->game->getEntities()->size() << std::endl;
 		if (game_set) {
+			std::cout << this->game->getEntities()->size() << std::endl;
 			for (Entity* en : *this->game->getEntities()) {
 				en->getModel()->draw(this->shader);
-		}
+			}
+			for (Entity* en : *this->game->get_map_collidables()) {
+				en->getModel()->draw(this->shader);
+			}
+			for (Entity* en : *this->game->get_map_decorations()) {
+				en->getModel()->draw(this->shader);
+			}
 		}
 
 		glfwSwapBuffers(window); // Swamp the buffer to the window, there are two buffers: one that is rendering and one from the previous frame that already rendered, 
 								 // we want to show the already rendered one to avoid flickering!
 		glfwPollEvents(); // Checks if any events are trigerred
 
+
+		float endCurrent = glfwGetTime(); //Current time (time at the beggining) endCurrent (time at the end)
+		std::this_thread::sleep_for(std::chrono::milliseconds((int) (1000 / FPS_CAP - (currentTime - endCurrent))));
 		last_time = currentTime;
 	}
 }

@@ -17,13 +17,15 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 {
 	if (action == GLFW_PRESS) {
 		switch (key) {
-		case GLFW_KEY_W:		//this->game->getLocalPlayer()->getCharacter().
+		case GLFW_KEY_F:		this->window->getCamera()->switch_free();
+			break;
+		case GLFW_KEY_W:		this->game->getLocalPlayer()->getCharacter()->set_press_up(true);
 			break;
 		case GLFW_KEY_S:		//
 			break;
-		case GLFW_KEY_A:		this->game->getLocalPlayer()->getCharacter()->change_direction(-1);
+		case GLFW_KEY_A:		this->game->getLocalPlayer()->getCharacter()->set_press_left(true);
 			break;
-		case GLFW_KEY_D:		this->game->getLocalPlayer()->getCharacter()->change_direction(1);
+		case GLFW_KEY_D:		this->game->getLocalPlayer()->getCharacter()->set_press_right(true);
 			break;
 		case GLFW_KEY_UP:		this->window->getCamera()->set_camera_dz(-1);
 			break;
@@ -37,13 +39,13 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 	}
 	else if (action == GLFW_RELEASE) {
 		switch (key) {
-		case GLFW_KEY_W:
+		case GLFW_KEY_W:		this->game->getLocalPlayer()->getCharacter()->set_press_up(false);
 			break;
 		case GLFW_KEY_S:
 			break;
-		case GLFW_KEY_A:		this->game->getLocalPlayer()->getCharacter()->change_direction(0);
+		case GLFW_KEY_A:		this->game->getLocalPlayer()->getCharacter()->set_press_left(false);
 			break;
-		case GLFW_KEY_D:		this->game->getLocalPlayer()->getCharacter()->change_direction(0);
+		case GLFW_KEY_D:		this->game->getLocalPlayer()->getCharacter()->set_press_right(false);
 			break;
 		case GLFW_KEY_UP:		this->window->getCamera()->set_camera_dz(0);
 			break;
