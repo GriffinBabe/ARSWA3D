@@ -5,7 +5,9 @@
 int main()
 {
 	Window* window = new Window();
-	Controller* controller = new Controller(window);
+	Game* game = new Game();
+	window->set_game(game);
+	Controller* controller = new Controller(window, game);
 	window->set_callback(controller);
 	window->set_mouse_callback(controller);
 	window->game_loop();

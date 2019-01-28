@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MESH_H
+#define MESH_H
+
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -51,3 +53,4 @@ private:
 	void setupMesh();
 };
 
+#endif // !MESH_H

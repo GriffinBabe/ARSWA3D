@@ -1,6 +1,18 @@
 #include "Model.h"
+#include "Entity.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+
+Model::Model(std::string path, Entity* entity) : meshes(std::vector<Mesh>())
+{
+	this->entity = entity;
+	loadModel(path);
+}
+
+Model::Model()
+{
+}
 
 Model::Model(std::string path) : meshes(std::vector<Mesh>())
 {
@@ -10,26 +22,29 @@ Model::Model(std::string path) : meshes(std::vector<Mesh>())
 void Model::draw(Shader * shader)
 {
 	glm::mat4 model = glm::mat4(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+	if (entity != nullptr) {
+		model = glm::translate(model, glm::vec3(this->entity->x, 0.0f, this->entity->y));
+	}
+	else {
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+	}
 	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 	shader->setMatrix4f("model", model);
-
 	for (unsigned int i = 0; i < meshes.size(); i++) {
 		meshes[i].draw(shader);
 	}
 }
 
-unsigned int Model::TextureFromFile(std::string path, std::string directory)
+unsigned int Model::TextureFromFile(const char* path, std::string &directory)
 {
 	std::string filename = std::string(path);
 	filename = directory + '/' + filename;
 	
-	std::cout << filename << std::endl;
-
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
+
 	unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
 	if (data)
 	{

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CAMERA_H
+#define CAMERA_H
+
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -46,3 +48,4 @@ private:
 	Shader* shader;
 };
 
+#endif // !CAMERA_H

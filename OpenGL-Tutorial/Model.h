@@ -1,9 +1,14 @@
+#ifndef MODEL_H
+#define MODEL_H
+
 #include <vector>
 #include "Mesh.h"
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 #include "Shader.h"
+
+class Entity;
 
 class Model {
 public: 
@@ -15,12 +20,14 @@ public:
 
 	Model();
 	Model(std::string path);
+	Model(std::string path, Entity* entity);
 	void draw(Shader* shader);
 
 private:
 	std::string directory;
 
-	unsigned int TextureFromFile(std::string path, std::string directory);
+
+	unsigned int TextureFromFile(const char* path, std::string &directory);
 
 	void loadModel(std::string path);
 	void processNode(aiNode *node, const aiScene *scene);
@@ -28,4 +35,7 @@ private:
 	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 											  std::string TypeName);
 
+	Entity* entity;
 };
+
+#endif

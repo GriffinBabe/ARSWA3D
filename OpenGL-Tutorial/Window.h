@@ -1,4 +1,6 @@
-#pragma once
+#ifndef  WINDOW_H
+#define WINDOW_H
+
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -6,6 +8,8 @@
 #include "Camera.h"
 #include "Model.h"
 #include <vector>
+
+#include "Game.h"
 
 class Controller;
 
@@ -15,6 +19,8 @@ public:
 	Window();
 	~Window();
 
+	void set_game(Game* game);
+
 	void set_callback(Controller* ctrl);
 	void set_mouse_callback(Controller* ctrl);
 	void game_loop();
@@ -22,12 +28,15 @@ public:
 	Camera* getCamera();
 
 private:
+	Game* game;
+
 	GLFWwindow* window;
 	Shader* shader;
 	Camera* camera;
 
 	std::vector<Model> models;
 
+	bool game_set = false;
 	bool kill_pill = false;
 	bool print_fps = false;
 
@@ -41,3 +50,4 @@ private:
 
 };
 
+#endif // ! WINDOW_H

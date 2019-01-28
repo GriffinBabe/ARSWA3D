@@ -45,7 +45,7 @@ Window::Window() : models(std::vector<Model>())
 		exit(-1);
 	}
 
-	models.push_back(Model("Models/cube/cube.obj"));
+	//models.push_back(Model("Models/witch/witch-toon.obj"));
 
 	// Initializes the shaders and installs them
 	this->shader = new Shader("GLSL/multiple_vertex_source.c", "GLSL/model_loading.c");
@@ -57,6 +57,12 @@ Window::~Window() {
 	glfwTerminate();
 	// Closes all gl components after the end of the game_loop
 	delete this->shader;
+}
+
+void Window::set_game(Game * game)
+{
+	this->game = game;
+	game_set = true;
 }
 
 void Window::set_callback(Controller* ctrl)
@@ -90,15 +96,17 @@ void Window::game_loop() {
 	while (!glfwWindowShouldClose(window) || kill_pill) { // Checks if the window has received the instruction to close or another thread from this program activated the kill_pill
 		double currentTime = glfwGetTime();
 		nbFrames++;
-		if (currentTime - last_time >= 1.0) { // If last prinf() was more than 1 sec ago
-			if (print_fps) {
-				printf("%f FPS\n", double(nbFrames));
-			}
-			nbFrames = 0;
-			last_time += 1.0;
-		}
+		//if (currentTime - last_time >= 1.0) { // If last prinf() was more than 1 sec ago
+		//	if (print_fps) {
+		//		printf("%f FPS\n", double(nbFrames));
+		//	}
+		//	nbFrames = 0;
+		//	last_time += 1.0;
+		//}
 
 		processInput(window);
+
+		game->game_loop(currentTime - last_time); // Main game loop for game logic
 
 		// ... Redering commands here ... //
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -116,10 +124,19 @@ void Window::game_loop() {
 			// We specifies wich Shader we use to render our triangle
 			md.draw(this->shader);
 		}
+		
+		//std::cout << this->game->getEntities()->size() << std::endl;
+		if (game_set) {
+			for (Entity* en : *this->game->getEntities()) {
+				en->getModel()->draw(this->shader);
+		}
+		}
 
 		glfwSwapBuffers(window); // Swamp the buffer to the window, there are two buffers: one that is rendering and one from the previous frame that already rendered, 
 								 // we want to show the already rendered one to avoid flickering!
 		glfwPollEvents(); // Checks if any events are trigerred
+
+		last_time = currentTime;
 	}
 }
 

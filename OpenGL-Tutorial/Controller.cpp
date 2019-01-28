@@ -2,9 +2,10 @@
 
 
 
-Controller::Controller(Window* w)
+Controller::Controller(Window* w, Game* g)
 {
 	this->window = w;
+	this->game = g;
 }
 
 
@@ -16,6 +17,14 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 {
 	if (action == GLFW_PRESS) {
 		switch (key) {
+		case GLFW_KEY_W:		//this->game->getLocalPlayer()->getCharacter().
+			break;
+		case GLFW_KEY_S:		//
+			break;
+		case GLFW_KEY_A:		this->game->getLocalPlayer()->getCharacter()->change_direction(-1);
+			break;
+		case GLFW_KEY_D:		this->game->getLocalPlayer()->getCharacter()->change_direction(1);
+			break;
 		case GLFW_KEY_UP:		this->window->getCamera()->set_camera_dz(-1);
 			break;
 		case GLFW_KEY_DOWN:		this->window->getCamera()->set_camera_dz(1);
@@ -28,6 +37,14 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 	}
 	else if (action == GLFW_RELEASE) {
 		switch (key) {
+		case GLFW_KEY_W:
+			break;
+		case GLFW_KEY_S:
+			break;
+		case GLFW_KEY_A:		this->game->getLocalPlayer()->getCharacter()->change_direction(0);
+			break;
+		case GLFW_KEY_D:		this->game->getLocalPlayer()->getCharacter()->change_direction(0);
+			break;
 		case GLFW_KEY_UP:		this->window->getCamera()->set_camera_dz(0);
 			break;
 		case GLFW_KEY_DOWN:		this->window->getCamera()->set_camera_dz(0);
