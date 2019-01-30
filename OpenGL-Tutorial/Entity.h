@@ -6,7 +6,7 @@
 class Entity
 {
 public:
-	Entity(float x, float y, std::string path);
+	Entity(float x, float y, Model* model);
 	~Entity();
 
 	float x = 0, y = 0; // Those are game model coordinates (the game model is on a 2D space)
@@ -19,7 +19,7 @@ public:
 
 	bool collidable = false;
 
-private:
+protected:
 	Model* model;
 };
 

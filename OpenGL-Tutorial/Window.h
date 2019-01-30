@@ -8,6 +8,7 @@
 #include "Camera.h"
 #include "Model.h"
 #include <vector>
+#include "CollisionView.h"
 
 #include "Game.h"
 
@@ -32,8 +33,10 @@ private:
 
 	GLFWwindow* window;
 	Shader* shader;
+	Shader* shader_collision;
 	Camera* camera;
 
+	CollisionView* collision_view;
 	std::vector<Model> models;
 
 	bool game_set = false;

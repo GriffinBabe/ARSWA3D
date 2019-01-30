@@ -2,9 +2,9 @@
 #include "Game.h"
 
 
-Player::Player(float x, float y)
+Player::Player(Game* game, float x, float y)
 {
-	this->character = new Witch(x, y);
+	this->character = new Witch(game, x, y);
 }
 
 

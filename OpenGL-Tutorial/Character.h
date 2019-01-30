@@ -1,12 +1,16 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "Entity.h"
+#include "SolidEntity.h"
+#include "ModelList.h"
+#include "Map.h"
 
-class Character : public Entity
+class Game;
+
+class Character : public SolidEntity
 {
 public:
-	Character(float x, float y, std::string path);
+	Character(Game* game, float x, float y, Model* model);
 	~Character();
 
 	void loop(float delta_time);
@@ -18,7 +22,14 @@ public:
 
 	void jump();
 
+	// Checks collision between this character and an entity
+	bool check_collision(SolidEntity* entity, int x, int y);
+
 protected:
+	Game* game = nullptr;;
+	Map* map = nullptr;
+
+
 	int health;
 	int max_health;
 	float acceleration;

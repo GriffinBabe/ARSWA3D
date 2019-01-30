@@ -2,7 +2,7 @@
 
 
 
-Witch::Witch(float x, float y) : Character(x, y, "Models/witch/witch-toon.obj")
+Witch::Witch(Game* game, float x, float y) : Character(game, x, y, ModelList::witch)
 {
 	health = 10;
 	max_health = health;
@@ -12,6 +12,12 @@ Witch::Witch(float x, float y) : Character(x, y, "Models/witch/witch-toon.obj")
 	max_speed = 5.0f;
 	max_jumps = 1;
 	jumps = max_jumps;
+
+	// Collision box
+	width = 0.5f;
+	height = 1.2f;
+	x_off = 0.0f;
+	y_off = 0.6;
 }
 
 

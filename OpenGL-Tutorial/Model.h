@@ -20,8 +20,7 @@ public:
 
 	Model();
 	Model(std::string path);
-	Model(std::string path, Entity* entity);
-	void draw(Shader* shader);
+	void draw(Shader* shader, Entity* entity);
 
 private:
 	std::string directory;
@@ -35,7 +34,6 @@ private:
 	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 											  std::string TypeName);
 
-	Entity* entity;
 };
 
 #endif

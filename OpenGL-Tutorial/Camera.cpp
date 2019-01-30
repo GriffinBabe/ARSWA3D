@@ -3,10 +3,9 @@
 float DEFAULT_X = 0.0f; float DEFAULT_Y = 3.0f; float DEFAULT_Z = 8.0f; 
 float DEFAULT_PITCHH = -6.0f; float DEFAULT_YAW = -90.0f; float DEF_ROLL = 0;
 
-Camera::Camera(Shader * sha) :
+Camera::Camera() :
 	view(glm::mat4())
 {
-	this->shader = sha;
 	projection = glm::perspective(glm::radians(45.0f), (float)600.0f/600.0f, 0.1f, 100.0f);
 	worldUp		= glm::vec3(0.0f, 1.0f, 0.0f);
 	position	= glm::vec3(0.0f, 0.0f, 0.0f);
@@ -18,7 +17,7 @@ Camera::~Camera()
 {
 }
 
-void Camera::set_matrices() // called on each render loop
+void Camera::set_matrices(Shader* shader) // called on each render loop
 {
 	float current_frame = glfwGetTime();
 	delta_time = current_frame - last_frame;
@@ -50,8 +49,10 @@ void Camera::set_matrices() // called on each render loop
 		view = glm::lookAt(position, position + cameraFront, cameraUp);
 	}
 
-	this->shader->setMatrix4f("view", view);
-	this->shader->setMatrix4f("projection", projection);
+	//std::cout << "cam: " << position.x << " " << position.y << " " << position.z << std::endl;
+
+	shader->setMatrix4f("view", view);
+	shader->setMatrix4f("projection", projection);
 }
 
 // direction is -1, 1, or 0

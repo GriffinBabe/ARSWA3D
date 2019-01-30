@@ -11,7 +11,7 @@ class Game;
 class Player
 {
 public:
-	Player(float x, float y);
+	Player(Game* game, float x, float y);
 	~Player();
 
 	Character* getCharacter();

@@ -12,11 +12,11 @@
 class Camera
 {
 public:
-	Camera(Shader* sha);
+	Camera();
 
 	~Camera();
 
-	void set_matrices();
+	void set_matrices(Shader* shader);
 
 	void set_camera_dx(int direction);
 	void set_camera_dz(int direction);
@@ -48,8 +48,6 @@ private:
 	float last_frame = 0;
 
 	bool free = false;
-
-	Shader* shader;
 
 };
 

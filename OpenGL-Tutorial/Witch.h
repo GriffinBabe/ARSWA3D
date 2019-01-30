@@ -6,9 +6,8 @@
 class Witch : public Character
 {
 public:
-	Witch(float x, float y);
+	Witch(Game* map, float x, float y);
 	~Witch();
-	//const std::string path = "Models/witch/witch-toon.obj";
 };
 
 #endif

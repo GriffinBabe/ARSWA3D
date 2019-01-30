@@ -48,10 +48,12 @@ Window::Window() : models(std::vector<Model>())
 	}
 
 	//models.push_back(Model("Models/witch/witch-toon.obj"));
+	this->collision_view = new CollisionView();
 
 	// Initializes the shaders and installs them
-	this->shader = new Shader("GLSL/multiple_vertex_source.c", "GLSL/model_loading.c");
-	this->camera = new Camera(this->shader);
+	this->shader = new Shader("GLSL/model_loading_vertex.c", "GLSL/model_loading_fragment.c");
+	this->shader_collision = new Shader("GLSL/collision_vertex.c", "GLSL/collision_fragment.c");
+	this->camera = new Camera();
 	this->camera->adapt_perspective(this->window);
 	glEnable(GL_DEPTH_TEST); // opengl's Z buffer used so things that are behind others aren't rendered
 }
@@ -117,24 +119,34 @@ void Window::game_loop() {
 		glClear(GL_COLOR_BUFFER_BIT); // Whenever we call glClear and clear the color buffer, the entire color buffer will be filled with the color as configured by glClearColor
 
 		this->shader->use();
-		this->camera->set_matrices();
+		this->camera->set_matrices(this->shader);
 
 		for (Model md : models) {
 			// We specifies wich Shader we use to render our triangle
-			md.draw(this->shader);
+			md.draw(this->shader, nullptr);
 		}
 		
-		//std::cout << this->game->getEntities()->size() << std::endl;
 		if (game_set) {
-			std::cout << this->game->getEntities()->size() << std::endl;
-			for (Entity* en : *this->game->getEntities()) {
-				en->getModel()->draw(this->shader);
+			for (SolidEntity* en : *this->game->getEntities()) {
+				en->getModel()->draw(this->shader, en);
 			}
-			for (Entity* en : *this->game->get_map_collidables()) {
-				en->getModel()->draw(this->shader);
+			for (SolidEntity* en : *this->game->get_map_collidables()) {
+				en->getModel()->draw(this->shader, en);
 			}
 			for (Entity* en : *this->game->get_map_decorations()) {
-				en->getModel()->draw(this->shader);
+				en->getModel()->draw(this->shader, en);
+			}
+		}
+
+		this->shader_collision->use();
+		this->camera->set_matrices(this->shader_collision);
+
+		if (game_set) {
+			for (SolidEntity* en : *this->game->getEntities()) {
+				this->collision_view->draw(this->shader_collision, en);
+			}
+			for (SolidEntity* en : *this->game->get_map_collidables()) {
+				this->collision_view->draw(this->shader_collision, en);
 			}
 		}
 
