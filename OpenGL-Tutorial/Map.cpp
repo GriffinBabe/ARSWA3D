@@ -12,7 +12,7 @@ Map::Map()
 	main_platform->scaleY = 1.5f;
 	this->decorative_entities->push_back(main_platform);
 	
-	SolidEntity* upper_platform = new SolidEntity(0.0f, 3.0f, 0.0f, 0.05f, 5.0f, 0.1f, ModelList::platform);
+	SolidEntity* upper_platform = new SolidEntity(0.0f, 2.8f, 0.0f, 0.05f, 5.0f, 0.1f, ModelList::platform);
 	main_platform->z = 0.5f;
 	main_platform->scaleX = 1.5f;
 	main_platform->scaleY = 1.5f;

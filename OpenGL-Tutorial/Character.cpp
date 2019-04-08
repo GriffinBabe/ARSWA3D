@@ -78,25 +78,31 @@ void Character::loop(float delta_time)
 	}
 
 	for (SolidEntity* se : *this->map->get_collision_entities()) { // Solid Entities of the map (as platforms)
-		if (check_collision(se, x, oldY)) { // Horizontal collision
+		if (check_collision(se, x+x_off, oldY+y_off)) { // Horizontal collision
 			x = oldX;
 			speedX = 0;
+			std::cout << "Horizontal Collision" << std::endl;
 		}
-		if (check_collision(se, oldX, y+y_off)) { // vertical collision
-			if (speedY < 0) {
-				jumps = max_jumps;
+		if (check_collision(se, oldX+x_off, y+y_off)) { // vertical collision
+			if (speedY > 0 && se->y > this->y) {
+				speedY = 0;
+				y = oldY;
 			}
-			y = oldY;
-			speedY = 0;
+			else if (speedY < 0) {
+				std::cout << "jumps = max_jumps" << std::endl;
+				jumps = max_jumps;
+				speedY = 0;
+				this->y = se->y + se->height + se->y_off;
+			}
 		}
 	}
 	for (SolidEntity* se : *this->game->getEntities()) { // Solid Entities of the game (as characters)
 		if (se != this) { // We don't wanna collide on ourself
-			if (check_collision(se, x, oldY)) { // Horizontal collision
+			if (check_collision(se, x+x_off, oldY+y_off)) { // Horizontal collision
 				x = oldX;
 				speedX = 0;
 			}
-			if (check_collision(se, oldX, y) && speedY <= 0) { // Vertical collision
+			if (check_collision(se, oldX+x_off, y+y_off) && speedY <= 0) { // Vertical collision
 				y = oldY;
 				speedY = 0;
 			}
@@ -139,7 +145,6 @@ void Character::set_press_up(bool b)
 void Character::jump()
 {
 	if (jumps > 0) {
-		std::cout << "I jumped" << std::endl;
 		speedY = jump_speed;
 		jumps--;
 	}
@@ -148,11 +153,10 @@ void Character::jump()
 bool Character::check_collision(SolidEntity * entity, int x, int y) 
 {
 	//std::cout << entity->x << " " << entity->y << " " << entity->width << " " << entity->height << " " << entity->x_off << " " << entity->y_off << std::endl;
-	if (x + x_off + width / 2 > entity->x - entity->x_off - entity->width / 2 &&
-		x - x_off - width / 2 < entity->x + entity->x_off + entity->width / 2 &&
-		y + y_off - height / 2 < entity->y + entity->y_off + entity->height / 2 &&
-		y + y_off + height / 2 > entity->y + entity->y_off + entity->height / 2) {
-			std::cout << "collision!" << std::endl;
+	if (x + x_off + width / 2 > entity->x + entity->x_off - entity->width / 2 &&
+		x + x_off - width / 2 < entity->x + entity->x_off + entity->width / 2 &&
+		y + y_off < entity->y + entity->y_off + entity->height &&
+		y + y_off + height > entity->y + entity->y_off) {
 			return true;
 	}
 	return false;
