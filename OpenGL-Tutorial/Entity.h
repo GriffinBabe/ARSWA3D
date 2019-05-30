@@ -1,8 +1,26 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-
 #include "Model.h"
+
+/**
+	Base class for all game entities, ranging from Characters to Projectiles,
+	NPCs to Decorations of the map.
+
+	The entity contains position, size, rotation of the model in world
+	coordinates. And are used to render as to game logic.
+
+	Also, an entity always has a model to render.
+
+	@Author: Darius Couchard
+*/
+
+struct Position {
+	float x = 0.0f;
+	float y = 0.0f;
+	float z = 0.0f;
+};
+
 class Entity
 {
 public:
@@ -17,6 +35,10 @@ public:
 
 	Model* getModel() const;
 
+	/**
+		By default is not collidable, in SolidEntity by default it is collidable,
+		but stuff like projectiles can not be collidable. Even if they can collide on other entities.
+	*/
 	bool collidable = false;
 
 protected:

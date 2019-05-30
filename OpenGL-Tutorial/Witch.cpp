@@ -1,23 +1,21 @@
 #include "Witch.h"
 
-
-
-Witch::Witch(Game* game, float x, float y) : Character(game, x, y, ModelList::witch)
+Witch::Witch(float x, float y) : Character(x, y, ModelList::witch)
 {
-	health = 10;
-	max_health = health;
-	acceleration = 7.0f;
-	gravity = -20.0f;
-	jump_speed = 8.0f;
-	max_speed = 5.0f;
-	max_jumps = 1;
-	jumps = max_jumps;
+	Mob::health = 10;
+	Mob::max_health = health;
+	MovingEntity::acceleration = 7.0f;
+	MovingEntity::gravity = -20.0f;
+	Mob::jump_speed = 8.0f;
+	Mob::max_jumps = 1;
+	Mob::jumps = max_jumps;
+	MovingEntity::max_speed = 8.0f;
 
 	// Collision box
-	width = 0.5f;
-	height = 1.2f;
-	x_off = 0.0f;
-	y_off = 0.6;
+	Entity::width = 0.5f;
+	Entity::height = 1.2f;
+	SolidEntity::x_off = 0.0f;
+	SolidEntity::y_off = 0.6f;
 }
 
 

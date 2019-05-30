@@ -43,7 +43,8 @@ private:
 	bool kill_pill = false;
 	bool print_fps = false;
 
-	void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+	void framebuffer_size_callback(GLFWwindow* window, int 
+		, int height);
 	void processInput(GLFWwindow* window);
 
 	static void key_callback_thunk(GLFWwindow* glwindow, int key, int scancode, int action, int mods);

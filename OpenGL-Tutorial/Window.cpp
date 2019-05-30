@@ -7,7 +7,7 @@
 #include <chrono>
 #include <thread>
 
-unsigned int WIDTH = 1280, HEIGHT = 720, FPS_CAP = 60;
+unsigned int WINDOW_WIDTH = 1280, WINDOW_HEIGHT = 720, FPS_CAP = 60;
 
 Window::Window() : models(std::vector<Model>())
 {
@@ -27,7 +27,7 @@ Window::Window() : models(std::vector<Model>())
 	/*
 	Initializes the window and checks if it has been build correctly
 	*/
-	this->window = glfwCreateWindow(WIDTH, HEIGHT, "ARSWA Rem.", NULL, NULL);
+	this->window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "ARSWA Rem.", NULL, NULL);
 	if (this->window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;

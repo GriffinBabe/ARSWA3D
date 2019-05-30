@@ -1,11 +1,12 @@
 #include "Controller.h"
-
+#include "Command.h"
 
 
 Controller::Controller(Window* w, Game* g)
 {
 	this->window = w;
 	this->game = g;
+	this->localCharacter = this->game->getLocalPlayer()->getCharacter();
 }
 
 
@@ -17,43 +18,82 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 {
 	if (action == GLFW_PRESS) {
 		switch (key) {
-		case GLFW_KEY_F:		this->window->getCamera()->switch_free();
+		case GLFW_KEY_F:		
+			this->window->getCamera()->switch_free();
 			break;
-		case GLFW_KEY_W:		this->game->getLocalPlayer()->getCharacter()->set_press_up(true);
+		case GLFW_KEY_W:
+			pressUp = true;
+			if (!pressDown)
+				game->addCommand(new JumpCommand(localCharacter));
 			break;
-		case GLFW_KEY_S:		//
+		case GLFW_KEY_S:
+			pressDown = true;
 			break;
-		case GLFW_KEY_A:		this->game->getLocalPlayer()->getCharacter()->set_press_left(true);
+		case GLFW_KEY_A:
+			pressLeft = true;
+			if (!pressRight)
+				game->addCommand(new DirectionCommand(localCharacter, -1));
+			else
+				game->addCommand(new DirectionCommand(localCharacter, 0));
 			break;
-		case GLFW_KEY_D:		this->game->getLocalPlayer()->getCharacter()->set_press_right(true);
+		case GLFW_KEY_D:		
+			pressRight = true;
+			if (!pressLeft)
+				game->addCommand(new DirectionCommand(localCharacter, 1));
+			else
+				game->addCommand(new DirectionCommand(localCharacter, 0));
 			break;
-		case GLFW_KEY_UP:		this->window->getCamera()->set_camera_dz(-1);
+		case GLFW_KEY_UP:		
+			this->window->getCamera()->set_camera_dz(-1);
 			break;
-		case GLFW_KEY_DOWN:		this->window->getCamera()->set_camera_dz(1);
+		case GLFW_KEY_DOWN:		
+			this->window->getCamera()->set_camera_dz(1);
 			break;
-		case GLFW_KEY_LEFT:		this->window->getCamera()->set_camera_dx(-1);
+		case GLFW_KEY_LEFT:		
+			this->window->getCamera()->set_camera_dx(-1);
 			break;
-		case GLFW_KEY_RIGHT:	this->window->getCamera()->set_camera_dx(1);
+		case GLFW_KEY_RIGHT:	
+			this->window->getCamera()->set_camera_dx(1);
 			break;
 		}
 	}
 	else if (action == GLFW_RELEASE) {
 		switch (key) {
-		case GLFW_KEY_W:		this->game->getLocalPlayer()->getCharacter()->set_press_up(false);
+		case GLFW_KEY_W:
+			pressUp = false;
 			break;
 		case GLFW_KEY_S:
+			pressDown = false;
 			break;
-		case GLFW_KEY_A:		this->game->getLocalPlayer()->getCharacter()->set_press_left(false);
+		case GLFW_KEY_A:
+			pressLeft = false;
+			if (pressRight)
+				game->addCommand(new DirectionCommand(localCharacter, 1));
+			else
+			{
+				game->addCommand(new DirectionCommand(localCharacter, 0));
+			}
 			break;
-		case GLFW_KEY_D:		this->game->getLocalPlayer()->getCharacter()->set_press_right(false);
+		case GLFW_KEY_D:		
+			pressRight = false;
+			if (pressLeft)
+				game->addCommand(new DirectionCommand(localCharacter, 1));
+			else
+			{
+				game->addCommand(new DirectionCommand(localCharacter, 0));
+			}
 			break;
-		case GLFW_KEY_UP:		this->window->getCamera()->set_camera_dz(0);
+		case GLFW_KEY_UP:		
+			this->window->getCamera()->set_camera_dz(0);
 			break;
-		case GLFW_KEY_DOWN:		this->window->getCamera()->set_camera_dz(0);
+		case GLFW_KEY_DOWN:		
+			this->window->getCamera()->set_camera_dz(0);
 			break;
-		case GLFW_KEY_LEFT:		this->window->getCamera()->set_camera_dx(0);
+		case GLFW_KEY_LEFT:		
+			this->window->getCamera()->set_camera_dx(0);
 			break;
-		case GLFW_KEY_RIGHT:	this->window->getCamera()->set_camera_dx(0);
+		case GLFW_KEY_RIGHT:	
+			this->window->getCamera()->set_camera_dx(0);
 			break;
 
 		}

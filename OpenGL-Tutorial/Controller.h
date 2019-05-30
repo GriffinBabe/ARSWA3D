@@ -15,9 +15,15 @@ public:
 
 private:
 	Game* game;
+	Character* localCharacter;
 	Window* window;
 	float lastX = 400, lastY = 300;
 	float mouse_sensitivity = 0.1f;
+
+	bool pressUp = false;
+	bool pressDown = false;
+	bool pressLeft = false;
+	bool pressRight = false;
 };
 
 #endif // CONTROLLER_H

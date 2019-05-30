@@ -4,7 +4,7 @@
 
 Player::Player(Game* game, float x, float y)
 {
-	this->character = new Witch(game, x, y);
+	this->character = new Witch(x, y);
 }
 
 

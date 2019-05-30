@@ -5,6 +5,9 @@
 #include "Map.h"
 #include "Entity.h"
 #include "Player.h"
+#include "CommandManager.h"
+#include "MovementManager.h"
+
 
 class Game
 {
@@ -17,10 +20,17 @@ public:
 	std::vector<Entity*>* get_map_decorations();
 
 	Map* get_map();
+	Player* getLocalPlayer();
 
+	/**
+		Main game loop
+	*/
 	void game_loop(float delta_time);
 
-	Player* getLocalPlayer();
+	/**
+		Adds a command to our CommandManager.
+	*/
+	void addCommand(Command* command);
 
 private:
 
@@ -28,6 +38,10 @@ private:
 	std::vector<Player*>* players;
 	std::vector<SolidEntity*>* entities;
 	Map* map;
+
+	CommandManager commandManager;
+	MovementManager movementManager;
+
 };
 
 #endif

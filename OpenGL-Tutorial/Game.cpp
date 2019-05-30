@@ -1,6 +1,5 @@
 #include "Game.h"
-
-
+#include "Command.h"
 
 Game::Game()
 {
@@ -16,8 +15,11 @@ Game::Game()
 
 	this->entities->push_back(this->localPlayer->getCharacter());
 	this->players->push_back(this->localPlayer);
-}
 
+	commandManager = CommandManager();
+	movementManager = MovementManager(this->entities, this->map->boundary_bottom,
+		this->map->boundary_left, this->map->boudary_right, this->map->boundary_top);
+}
 
 Game::~Game()
 {
@@ -49,10 +51,14 @@ Map * Game::get_map()
 
 void Game::game_loop(float delta_time)
 {
-	//std::cout << this->localPlayer->getCharacter()->x << " " << this->localPlayer->getCharacter()->y << " " << this->localPlayer->getCharacter()->z << std::endl;
-	for (Player* p : *this->players) {
-		p->getCharacter()->loop(delta_time);
-	}
+	commandManager.loop(delta_time);
+	movementManager.loop(delta_time);
+
+}
+
+void Game::addCommand(Command * command)
+{
+	commandManager.addCommand(command);
 }
 
 Player * Game::getLocalPlayer()
