@@ -7,10 +7,10 @@ Model* ModelList::wall = NULL;
 
 void ModelList::Init()
 {
-	witch = new Model("Models/witch/witch-toon2.obj");
-	roof = new Model("Models/platform/roof.obj");
-	platform = new Model("Models/platform/platform2.obj");
-	wall = new Model("Models/platform/wall.obj");
+	witch = new Model("Models/witch/witch-toon2.obj", 0.0f, 0.6f);
+	roof = new Model("Models/platform/roof.obj", 0.0f, 0.0f);
+	platform = new Model("Models/platform/platform2.obj", 0.0f, 0.05f);
+	wall = new Model("Models/platform/wall.obj", 0.0f, 0.0f);
 }
 
 void ModelList::clear()

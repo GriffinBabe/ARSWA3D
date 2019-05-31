@@ -6,25 +6,25 @@ Map::Map()
 	this->decorative_entities = new std::vector<Entity*>();
 
 	// We need to add map objects but we are going to let only one for this moment
-	Entity* main_platform = new Entity(0.0f, -0.06f, ModelList::platform);
+	Entity* main_platform = new Entity(0.0f, -0.0f, ModelList::platform);
 	main_platform->z = 0.5f;
 	main_platform->scaleX = 1.5f;
 	main_platform->scaleY = 1.5f;
 	this->decorative_entities->push_back(main_platform);
 	
-	SolidEntity* upper_platform = new SolidEntity(0.0f, 2.8f, 0.0f, 0.05f, 5.0f, 0.1f, ModelList::platform);
+	SolidEntity* upper_platform = new SolidEntity(0.0f, 2.8f,  ModelList::platform);
 	main_platform->z = 0.5f;
 	main_platform->scaleX = 1.5f;
 	main_platform->scaleY = 1.5f;
 	this->collision_entities->push_back(upper_platform);
 
 
-	SolidEntity* platform_left = new SolidEntity(-2.0f, 1.5f, 0.0f, 0.05f, 2.75f, 0.1f, ModelList::platform);
+	SolidEntity* platform_left = new SolidEntity(-2.0f, 1.5f, 2.75f, 0.1f, ModelList::platform);
 	platform_left->z = 0.5f;
 	platform_left->scaleX = 0.5f;
 	this->collision_entities->push_back(platform_left);
 
-	SolidEntity* platform_right = new SolidEntity(2.0f, 1.5f, 0.0f, 0.05f, 2.75f, 0.1f, ModelList::platform);
+	SolidEntity* platform_right = new SolidEntity(2.0f, 1.5f, 2.75f, 0.1f, ModelList::platform);
 	platform_right->z = 0.5f;
 	platform_right->scaleX = 0.5f;
 	this->collision_entities->push_back(platform_right);

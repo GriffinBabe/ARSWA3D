@@ -7,8 +7,11 @@ Game::Game()
 	this->entities = new std::vector<SolidEntity*>();
 	this->players = new std::vector<Player*>();
 
-	//NOTE: There are entities here too!
+	// Loads all our entities from the map and puts them into our game.
 	this->map = new Map();
+	for (auto* n : *map->get_collision_entities()) {
+		entities->push_back(n);
+	}
 	this->localPlayer = new Player(this, 0.0f, 0.0f);
 
 	std::cout << this->localPlayer->getCharacter()->width << " " << this->localPlayer->getCharacter()->height << std::endl;

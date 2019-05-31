@@ -24,6 +24,7 @@ private:
 	bool pressDown = false;
 	bool pressLeft = false;
 	bool pressRight = false;
+	void checkDirections();
 };
 
 #endif // CONTROLLER_H

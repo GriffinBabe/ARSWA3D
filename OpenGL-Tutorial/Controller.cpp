@@ -28,21 +28,15 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 			break;
 		case GLFW_KEY_S:
 			pressDown = true;
+			checkDirections();
 			break;
 		case GLFW_KEY_A:
 			pressLeft = true;
-			if (!pressRight)
-				game->addCommand(new DirectionCommand(localCharacter, -1));
-			else
-				game->addCommand(new DirectionCommand(localCharacter, 0));
+			checkDirections();
 			break;
 		case GLFW_KEY_D:		
 			pressRight = true;
-			if (!pressLeft)
-				game->addCommand(new DirectionCommand(localCharacter, 1));
-			else
-				game->addCommand(new DirectionCommand(localCharacter, 0));
-			break;
+			checkDirections();
 		case GLFW_KEY_UP:		
 			this->window->getCamera()->set_camera_dz(-1);
 			break;
@@ -64,24 +58,15 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 			break;
 		case GLFW_KEY_S:
 			pressDown = false;
+			checkDirections();
 			break;
 		case GLFW_KEY_A:
 			pressLeft = false;
-			if (pressRight)
-				game->addCommand(new DirectionCommand(localCharacter, 1));
-			else
-			{
-				game->addCommand(new DirectionCommand(localCharacter, 0));
-			}
+			checkDirections();
 			break;
 		case GLFW_KEY_D:		
 			pressRight = false;
-			if (pressLeft)
-				game->addCommand(new DirectionCommand(localCharacter, 1));
-			else
-			{
-				game->addCommand(new DirectionCommand(localCharacter, 0));
-			}
+			checkDirections();
 			break;
 		case GLFW_KEY_UP:		
 			this->window->getCamera()->set_camera_dz(0);
@@ -113,4 +98,34 @@ void Controller::mouse_callback(GLFWwindow * glwindow, double xpos, double ypos)
 
 	this->window->getCamera()->change_yaw_offset(xoffset);
 	this->window->getCamera()->change_pitch_offset(yoffset);
+}
+
+void Controller::checkDirections()
+{
+	if (!pressDown) {
+		if (!pressLeft && !pressRight) {
+			game->addCommand(new DirectionCommand(this->localCharacter, 0));
+			return;
+		}
+		else if (pressLeft && pressRight) {
+			game->addCommand(new DirectionCommand(this->localCharacter, 0));
+			return;
+		}
+		else if (pressLeft && !pressRight) {
+			game->addCommand(new DirectionCommand(this->localCharacter, -1));
+			return;
+		}
+		else if (pressRight && !pressLeft) {
+			game->addCommand(new DirectionCommand(this->localCharacter, 1));
+			return;
+		}
+		else {
+			game->addCommand(new DirectionCommand(this->localCharacter, 0));
+			return;
+		}
+	}
+	else {
+		game->addCommand(new DirectionCommand(this->localCharacter, 0));
+		return;
+	}
 }

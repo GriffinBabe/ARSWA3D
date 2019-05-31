@@ -19,9 +19,14 @@ public:
 	bool gammaCorrection;
 
 	Model();
-	Model(std::string path);
-	void draw(Shader* shader, Entity* entity);
 
+	/**
+		NB: x_off are the distance between the center of the mesh (ofter located at the center bottom) to
+		what we might use as the center in the model.
+	*/
+	Model(std::string path, float x_off, float y_off);
+	void draw(Shader* shader, Entity* entity);
+	float x_off = 0.0f; float y_off;
 private:
 	std::string directory;
 
@@ -33,6 +38,7 @@ private:
 	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 											  std::string TypeName);
+
 
 };
 

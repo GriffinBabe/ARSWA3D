@@ -18,19 +18,18 @@ void Mob::hit(SolidEntity* entity)
 
 void Mob::checkMapBoundaries(float bottom, float left, float right, float top)
 {
-	std::cout << "Collide in mob" << std::endl;
-	if (y + y_off - height / 2 < bottom && speedY <= 0) {
-		y = bottom;
+	if (y - height / 2 < bottom && speedY <= 0) {
+		y = bottom + height/2;
 		speedY = 0;
 		jumps = max_jumps;
 	}
 
-	if (x + x_off + width / 2 > right || x - x_off - width / 2 < left) {
+	if (x + width / 2 > right || x - width / 2 < left) {
 		x = oldX;
 		speedX = 0;
 	}
 
-	if (y + y_off + height / 2 > top) {
+	if (y + height / 2 > top) {
 		y = top;
 	}
 }
@@ -45,5 +44,5 @@ void Mob::jump()
 
 void Mob::change_direction(int direct)
 {
-	direction = direction;
+	direction = direct;
 }

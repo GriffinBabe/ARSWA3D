@@ -6,7 +6,7 @@ Model::Model()
 {
 }
 
-Model::Model(std::string path) : meshes(std::vector<Mesh>())
+Model::Model(std::string path, float x_off, float y_off) : meshes(std::vector<Mesh>()), x_off(x_off), y_off(y_off)
 {
 	loadModel(path);
 }
@@ -15,7 +15,7 @@ void Model::draw(Shader * shader, Entity* entity)
 {
 	glm::mat4 model = glm::mat4(1.0f);
 	if (entity != nullptr) {
-		model = glm::translate(model, glm::vec3(entity->x, entity->y, entity->z));
+		model = glm::translate(model, glm::vec3(entity->x - x_off, entity->y - y_off, entity->z));
 		model = glm::rotate(model, glm::radians(entity->rotX), glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(entity->rotY), glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, glm::radians(entity->rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
