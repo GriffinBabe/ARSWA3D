@@ -6,13 +6,13 @@ Map::Map()
 	this->decorative_entities = new std::vector<Entity*>();
 
 	// We need to add map objects but we are going to let only one for this moment
-	Entity* main_platform = new Entity(0.0f, -0.0f, ModelList::platform);
+	Entity* main_platform = new DecorativeEntity(0.0f, -0.15f, ModelList::platform);
 	main_platform->z = 0.5f;
 	main_platform->scaleX = 1.5f;
 	main_platform->scaleY = 1.5f;
 	this->decorative_entities->push_back(main_platform);
 	
-	SolidEntity* upper_platform = new SolidEntity(0.0f, 2.8f,  ModelList::platform);
+	SolidEntity* upper_platform = new SolidEntity(0.0f, 3.0f, 5.0f, 0.1f, ModelList::platform);
 	main_platform->z = 0.5f;
 	main_platform->scaleX = 1.5f;
 	main_platform->scaleY = 1.5f;
@@ -29,27 +29,27 @@ Map::Map()
 	platform_right->scaleX = 0.5f;
 	this->collision_entities->push_back(platform_right);
 
-	Entity* back_wall = new Entity(0.0f, 2.0f, ModelList::wall);
+	Entity* back_wall = new DecorativeEntity(0.0f, 2.0f, ModelList::wall);
 	back_wall->z = -1.0f;
 	back_wall->scaleX = 4.0f;
 	back_wall->scaleY = 4.0f;
 	this->decorative_entities->push_back(back_wall);
 
-	Entity* left_wall = new Entity(-4.0f, 2.0f, ModelList::wall);
+	Entity* left_wall = new DecorativeEntity(-4.0f, 2.0f, ModelList::wall);
 	left_wall->rotY = -90.0f;
 	left_wall->z = -1.0f;
 	left_wall->scaleX = 4.0f;
 	left_wall->scaleY = 4.0f;
 	this->decorative_entities->push_back(left_wall);
 
-	Entity* right_wall = new Entity(4.0f, 2.0f, ModelList::wall);
+	Entity* right_wall = new DecorativeEntity(4.0f, 2.0f, ModelList::wall);
 	right_wall->rotY = 90.0f;
 	right_wall->z = -1.0f;
 	right_wall->scaleX = 4.0f;
 	right_wall->scaleY = 4.0f;
 	this->decorative_entities->push_back(right_wall);
 
-	Entity* roof = new Entity(0.0f, 4.5f, ModelList::roof);
+	Entity* roof = new DecorativeEntity(0.0f, 4.5f, ModelList::roof);
 	roof->scaleX = 4.0f;
 	roof->scaleY = 3.0f;
 	roof->scaleZ = 4.0f;

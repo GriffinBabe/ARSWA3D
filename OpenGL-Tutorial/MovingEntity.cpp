@@ -4,6 +4,10 @@ MovingEntity::MovingEntity(float x, float y, Model * model) : SolidEntity(x,y,mo
 {
 }
 
+MovingEntity::~MovingEntity()
+{
+}
+
 Speed MovingEntity::accelerate(float delta_time)
 {
 	if (direction != 0) {

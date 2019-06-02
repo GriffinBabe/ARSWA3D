@@ -12,6 +12,7 @@ class Mob : public MovingEntity
 {
 public:
 	Mob(float x,float y,Model* model);
+	~Mob();
 
 	// Called when it hits again a solid entity
 	void hit(SolidEntity* entity) final;

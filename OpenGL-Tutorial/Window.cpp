@@ -138,6 +138,7 @@ void Window::game_loop() {
 			}
 		}
 
+		/*
 		this->shader_collision->use();
 		this->camera->set_matrices(this->shader_collision);
 
@@ -149,6 +150,7 @@ void Window::game_loop() {
 				this->collision_view->draw(this->shader_collision, en);
 			}
 		}
+		*/
 
 		glfwSwapBuffers(window); // Swamp the buffer to the window, there are two buffers: one that is rendering and one from the previous frame that already rendered, 
 								 // we want to show the already rendered one to avoid flickering!

@@ -24,8 +24,8 @@ struct Position {
 class Entity
 {
 public:
-	Entity(float x, float y, Model* model);
-	~Entity();
+	Entity() {};
+	virtual ~Entity() {};
 
 	float x = 0, y = 0; // Those are game model coordinates (the game model is on a 2D space)
 	float z = 0; // for decorative entities
@@ -43,6 +43,21 @@ public:
 
 protected:
 	Model* model;
+	// Info, subclass sandbox can help decoupling. Ex: we can put static Game* game; and access the game from every entity
+};
+
+/**
+	Simple trick so we can instatiate Entity (which is an abstract class).
+	This class is generally used on decorative models that don't have impact on gameplay
+	@Author Darius Couchard
+*/
+
+class DecorativeEntity : public Entity
+{
+public:
+	DecorativeEntity(float x, float y, Model* model);
+
+	void dummyPolymorphic() {}
 };
 
 #endif // !ENTITY_H
