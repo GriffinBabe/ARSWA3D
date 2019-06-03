@@ -6,6 +6,7 @@
 #include <streambuf>
 #include <chrono>
 #include <thread>
+#include "ModelList.h"
 
 unsigned int WINDOW_WIDTH = 1280, WINDOW_HEIGHT = 720, FPS_CAP = 60;
 
@@ -96,22 +97,23 @@ void Window::processInput(GLFWwindow* window) {
 }
 
 void Window::game_loop() {
-	float last_time = glfwGetTime();
+	float lastTime = glfwGetTime();
 	unsigned int nbFrames = 0;
 	while (!glfwWindowShouldClose(window) || kill_pill) { // Checks if the window has received the instruction to close or another thread from this program activated the kill_pill
 		double currentTime = glfwGetTime();
 		nbFrames++;
-		//if (currentTime - last_time >= 1.0) { // If last prinf() was more than 1 sec ago
+		//if (currentTime - lastTime >= 1.0) { // If last prinf() was more than 1 sec ago
 		//	if (print_fps) {
 		//		printf("%f FPS\n", double(nbFrames));
 		//	}
 		//	nbFrames = 0;
-		//	last_time += 1.0;
+		//	lastTime += 1.0;
 		//}
 
 		processInput(window);
 
-		game->game_loop(currentTime - last_time); // Main game loop for game logic
+		float deltaTime = currentTime - lastTime;
+		game->game_loop(deltaTime); // Main game loop for game logic
 
 		// ... Redering commands here ... //
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -123,18 +125,12 @@ void Window::game_loop() {
 
 		for (Model md : models) {
 			// We specifies wich Shader we use to render our triangle
-			md.draw(this->shader, nullptr);
+			md.draw(this->shader, deltaTime);
 		}
 		
 		if (game_set) {
-			for (SolidEntity* en : *this->game->getEntities()) {
-				en->getModel()->draw(this->shader, en);
-			}
-			for (SolidEntity* en : *this->game->get_map_collidables()) {
-				en->getModel()->draw(this->shader, en);
-			}
-			for (Entity* en : *this->game->get_map_decorations()) {
-				en->getModel()->draw(this->shader, en);
+			for (Model* md : ModelList::loadedModels) {
+				md->draw(this->shader, deltaTime);
 			}
 		}
 
@@ -159,7 +155,7 @@ void Window::game_loop() {
 
 		float endCurrent = glfwGetTime(); //Current time (time at the beggining) endCurrent (time at the end)
 		std::this_thread::sleep_for(std::chrono::milliseconds((int) (1000 / FPS_CAP - (currentTime - endCurrent))));
-		last_time = currentTime;
+		lastTime = currentTime;
 	}
 }
 

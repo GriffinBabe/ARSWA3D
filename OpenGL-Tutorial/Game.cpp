@@ -1,23 +1,20 @@
 #include "Game.h"
 #include "Command.h"
 
-Game::Game()
+Game::Game() : entities(std::vector<Entity*>()), players(std::vector<Player*>())
 {
-
-	this->entities = new std::vector<Entity*>();
-	this->players = new std::vector<Player*>();
-
 	// Loads all our entities from the map and puts them into our game.
 	this->map = new Map();
 	for (auto* n : map->getEntities()) {
-		entities->push_back(n);
+		entities.push_back(n);
 	}
 
+	// Creates a local player and attach the Model to it.
 	this->localPlayer = new Player(this, 0.0f, 0.0f);
 	ModelList::attachCharacter(this->localPlayer->getCharacter());
 
-	this->entities->push_back(this->localPlayer->getCharacter());
-	this->players->push_back(this->localPlayer);
+	entities.push_back(this->localPlayer->getCharacter());
+	players.push_back(this->localPlayer);
 
 	commandManager = CommandManager();
 	movementManager = MovementManager(this->map->boundary_bottom,
@@ -28,14 +25,12 @@ Game::~Game()
 {
 	delete map;
 	delete localPlayer;
-	delete entities;
-	delete players;
 }
 
 void Game::game_loop(float delta_time)
 {
 	commandManager.loop(delta_time);
-	movementManager.loop(this->entities, delta_time);
+	movementManager.loop(&entities, delta_time);
 }
 
 void Game::addCommand(Command * command)

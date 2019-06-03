@@ -1,6 +1,7 @@
 #include "MovingEntity.h"
+#include <cmath>
 
-MovingEntity::MovingEntity(float x, float y) : SolidEntity(x,y,)
+MovingEntity::MovingEntity(float x, float y) : SolidEntity(x,y)
 {
 }
 

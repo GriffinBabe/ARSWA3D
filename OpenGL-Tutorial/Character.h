@@ -2,8 +2,6 @@
 #define CHARACTER_H
 
 #include "Mob.h"
-#include "ModelList.h"
-#include "Map.h"
 
 class Game;
 

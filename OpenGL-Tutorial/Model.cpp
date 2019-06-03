@@ -14,25 +14,22 @@ Model::Model(std::string path, float x_off, float y_off) :
 
 void Model::draw(Shader * shader, float delta_time)
 {
-	glm::mat4 model;
 	for (Entity* entity : entities) {
-		model = glm::mat4(1.0f);
+		glm::mat4 model = glm::mat4(1.0f);
 		if (entity != nullptr) {
 			model = glm::translate(model, glm::vec3(entity->x - x_off, entity->y - y_off, entity->z));
 			model = glm::rotate(model, glm::radians(entity->rotX), glm::vec3(1.0f, 0.0f, 0.0f));
 			model = glm::rotate(model, glm::radians(entity->rotY), glm::vec3(0.0f, 1.0f, 0.0f));
 			model = glm::rotate(model, glm::radians(entity->rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
 			model = glm::scale(model, glm::vec3(entity->scaleX, entity->scaleY, entity->scaleZ));
-			shader->setMatrix4f("model", model);
-			for (unsigned int i = 0; i < meshes.size(); i++) {
-				meshes[i].draw(shader);
-			}
 		}
 		else {
-			/*
 			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-			*/
+		}
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		shader->setMatrix4f("model", model);
+		for (unsigned int i = 0; i < meshes.size(); i++) {
+			meshes[i].draw(shader);
 		}
 	}
 }

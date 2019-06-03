@@ -12,6 +12,8 @@ class ModelList
 		static Model* roof;
 		static Model* wall;
 
+		static std::vector<Model*> loadedModels;
+
 		static void Init();
 		static void clear();
 		~ModelList();

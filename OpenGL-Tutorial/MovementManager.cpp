@@ -29,7 +29,7 @@ void MovementManager::loop(std::vector<Entity*>* entities, float delta_time)
 			m_entity->checkMapBoundaries(bottomMap, leftMap, rightMap, topMap); // Checks if it hasn't crossed the map boundaries
 
 			for (Entity* entity_to_collide : *entities) { // Checks collisions.
-				if (SolidEntity* solidEntity = dynamic_cast<SolidEntity*>(entity_to_collide))
+				if (SolidEntity* solidEntity = dynamic_cast<SolidEntity*>(entity_to_collide)) {
 					if (solidEntity != entity) {
 						if (solidEntity->check_collision(m_entity)) {
 							m_entity->hit(solidEntity);

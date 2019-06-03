@@ -5,7 +5,7 @@ Character::Character(float x, float y) : Mob(x,y)
 
 }
 
-Witch::Witch(float x, float y) : Character(x, y, ModelList::witch)
+Witch::Witch(float x, float y) : Character(x, y)
 {
 
 	Character::id = WITCH;

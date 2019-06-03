@@ -37,6 +37,7 @@ void Controller::key_callback(GLFWwindow* glwindow, int key, int scancode, int a
 		case GLFW_KEY_D:		
 			pressRight = true;
 			checkDirections();
+			break;
 		case GLFW_KEY_UP:		
 			this->window->getCamera()->set_camera_dz(-1);
 			break;

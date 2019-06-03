@@ -30,8 +30,8 @@ public:
 private:
 
 	Player* localPlayer;
-	std::vector<Player*>* players;
-	std::vector<Entity*>* entities;
+	std::vector<Player*> players;
+	std::vector<Entity*> entities;
 	Map* map;
 
 	CommandManager commandManager;
