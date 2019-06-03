@@ -2,6 +2,7 @@
 #define MODELLIST_H
 
 #include "Model.h"
+#include "Character.h"
 
 class ModelList 
 {
@@ -15,6 +16,7 @@ class ModelList
 		static void clear();
 		~ModelList();
 		
+		static void attachCharacter(Character* character);
 };
 
 #endif // !MODELLIST_H

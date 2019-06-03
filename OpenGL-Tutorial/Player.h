@@ -4,7 +4,7 @@
 
 
 #include <string>
-#include "Witch.h"
+#include "Character.h"
 
 class Game;
 

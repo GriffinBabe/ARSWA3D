@@ -1,8 +1,6 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include "Model.h"
-
 /**
 	Base class for all game entities, ranging from Characters to Projectiles,
 	NPCs to Decorations of the map.
@@ -33,8 +31,6 @@ public:
 	float rotX=0, rotY=0, rotZ=0; // By default they are null
 	float scaleX = 1.0f; float scaleY = 1.0f; float scaleZ = 1.0f;
 
-	Model* getModel() const;
-
 	/**
 		By default is not collidable, in SolidEntity by default it is collidable,
 		but stuff like projectiles can not be collidable. Even if they can collide on other entities.
@@ -42,7 +38,6 @@ public:
 	bool collidable = false;
 
 protected:
-	Model* model;
 	// Info, subclass sandbox can help decoupling. Ex: we can put static Game* game; and access the game from every entity
 };
 
@@ -55,7 +50,7 @@ protected:
 class DecorativeEntity : public Entity
 {
 public:
-	DecorativeEntity(float x, float y, Model* model);
+	DecorativeEntity(float x, float y);
 
 	void dummyPolymorphic() {}
 };

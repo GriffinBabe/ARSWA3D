@@ -12,7 +12,6 @@
 class MovementManager
 {
 private:
-	std::vector<SolidEntity*>* solid_entities = nullptr;
 
 	// Map Boundaries
 	float bottomMap;
@@ -22,9 +21,9 @@ private:
 
 public:
 	MovementManager();
-	MovementManager(std::vector<SolidEntity*>* solid_entities, float bottom, float left, float right, float top);
+	MovementManager(float bottom, float left, float right, float top);
 	~MovementManager();
 
-	void loop(float delta_time);
+	void loop(std::vector<Entity*>* entities, float delta_time);
 };
 

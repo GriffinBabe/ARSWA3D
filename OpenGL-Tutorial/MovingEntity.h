@@ -18,7 +18,7 @@ class MovingEntity : public SolidEntity
 {
 public:
 
-	MovingEntity(float x, float y, Model* model);
+	MovingEntity(float x, float y);
 	~MovingEntity();
 
 

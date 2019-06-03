@@ -21,3 +21,13 @@ void ModelList::clear()
 ModelList::~ModelList()
 {
 }
+
+void ModelList::attachCharacter(Character* character)
+{
+	switch (character->id) {
+
+	case (WITCH):
+		ModelList::witch->addEntity(character);
+		break;
+	}
+}

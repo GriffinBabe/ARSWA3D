@@ -1,19 +1,17 @@
 #include "SolidEntity.h"
 
 
-SolidEntity::SolidEntity(float x, float y, Model * model)
+SolidEntity::SolidEntity(float x, float y)
 {
 	Entity::x = x;
 	Entity::y = y;
-	Entity::model = model;
 	collidable = true;
 }
 
-SolidEntity::SolidEntity(float x, float y, float width, float height, Model* model) : width(width), height(height)
+SolidEntity::SolidEntity(float x, float y, float width, float height) : width(width), height(height)
 {
 	Entity::x = x;
 	Entity::y = y;
-	Entity::model = model;
 	collidable = true;
 }
 

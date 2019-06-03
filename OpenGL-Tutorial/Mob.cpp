@@ -1,7 +1,7 @@
 #include "Mob.h"
 #include <iostream>
 
-Mob::Mob(float x, float y, Model * model) : MovingEntity(x,y,model)
+Mob::Mob(float x, float y) : MovingEntity(x,y)
 {
 }
 

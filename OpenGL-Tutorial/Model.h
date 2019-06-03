@@ -13,11 +13,6 @@ class Entity;
 class Model {
 public: 
 
-	std::vector<Texture> textures_loaded;
-	std::vector<Mesh> meshes;
-	//std::string directory;
-	bool gammaCorrection;
-
 	Model();
 
 	/**
@@ -25,10 +20,24 @@ public:
 		what we might use as the center in the model.
 	*/
 	Model(std::string path, float x_off, float y_off);
-	void draw(Shader* shader, Entity* entity);
+	void draw(Shader* shader, float delta_time);
 	float x_off = 0.0f; float y_off;
+
+	/**
+		Removes one of the entities.
+	*/
+	void removeEntity(Entity* entity);
+	void addEntity(Entity* entity);
 private:
+
+	std::vector<Texture> textures_loaded;
+	std::vector<Mesh> meshes;
+	//std::string directory;
+	bool gammaCorrection;
+
 	std::string directory;
+
+	std::vector<Entity*> entities;
 
 
 	unsigned int TextureFromFile(const char* path, std::string &directory);
@@ -38,8 +47,6 @@ private:
 	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 											  std::string TypeName);
-
-
 };
 
 #endif

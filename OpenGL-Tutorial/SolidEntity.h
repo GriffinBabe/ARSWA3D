@@ -11,10 +11,10 @@ class SolidEntity : public Entity
 {
 public:
 
-	SolidEntity(float x, float y, Model * model);
+	SolidEntity(float x, float y);
 
 	// Initialised like this by platforms
-	SolidEntity(float x, float y, float width, float height, Model* model);
+	SolidEntity(float x, float y, float width, float height);
 	~SolidEntity();
 
 	/**

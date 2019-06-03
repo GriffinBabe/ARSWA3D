@@ -1,6 +1,6 @@
 #include "MovingEntity.h"
 
-MovingEntity::MovingEntity(float x, float y, Model * model) : SolidEntity(x,y,model)
+MovingEntity::MovingEntity(float x, float y) : SolidEntity(x,y,)
 {
 }
 

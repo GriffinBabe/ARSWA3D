@@ -48,7 +48,7 @@ public:
 	std::vector<Texture> textures;
 
 	void draw(Shader* shader);
-private:
+protected:
 	unsigned int VAO, VBO, EBO;
 	void setupMesh();
 };

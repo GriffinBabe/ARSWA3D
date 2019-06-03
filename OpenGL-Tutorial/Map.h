@@ -12,13 +12,11 @@ public:
 	Map();
 	~Map();
 
-	std::vector<SolidEntity*>* get_collision_entities();
-	std::vector<Entity*>* get_decorative_entities();
+	const std::vector<Entity*>& getEntities() { return entities; }
 	float boundary_left = -4.0f, boudary_right = 4.0f, boundary_top = 4.5f, boundary_bottom = 0.0f;
 
 private:
-	std::vector<SolidEntity*>* collision_entities;
-	std::vector<Entity*>* decorative_entities;
+	std::vector<Entity*> entities;
 
 
 };
