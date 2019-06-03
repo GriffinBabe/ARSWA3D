@@ -36,7 +36,7 @@ void Model::draw(Shader * shader, float delta_time)
 
 void Model::removeEntity(Entity * entity)
 {
-	// TODO remove this model from the entity observers.
+	entity->removeObserver(this);
 	int index = 0;
 	for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it, ++index) {
 		if (*it == entity) {
@@ -48,8 +48,15 @@ void Model::removeEntity(Entity * entity)
 
 void Model::addEntity(Entity * entity)
 {
-	// TODO add this model in the entity observers.
+	entity->addObserver(this);
 	entities.push_back(entity);
+}
+
+void Model::onNotify(Entity& entitiy, EEvent event)
+{
+	switch (event) {
+
+	}
 }
 
 unsigned int Model::TextureFromFile(const char* path, std::string &directory)

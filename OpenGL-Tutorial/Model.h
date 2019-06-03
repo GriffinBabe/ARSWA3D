@@ -7,10 +7,11 @@
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
 #include "Shader.h"
+#include "Observer.h"
 
 class Entity;
 
-class Model {
+class Model : public Observer{
 public: 
 
 	Model();
@@ -28,6 +29,8 @@ public:
 	*/
 	void removeEntity(Entity* entity);
 	void addEntity(Entity* entity);
+
+	void onNotify(Entity& entitiy, EEvent event) override;
 private:
 
 	std::vector<Texture> textures_loaded;

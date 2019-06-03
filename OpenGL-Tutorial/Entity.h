@@ -1,6 +1,8 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
+#include "Observer.h"
+
 /**
 	Base class for all game entities, ranging from Characters to Projectiles,
 	NPCs to Decorations of the map.
@@ -13,16 +15,23 @@
 	@Author: Darius Couchard
 */
 
+enum EEvent {
+	WALK,
+	RUN,
+	JUMP,
+	LAND
+};
+
 struct Position {
 	float x = 0.0f;
 	float y = 0.0f;
 	float z = 0.0f;
 };
 
-class Entity
+class Entity : public Subject
 {
 public:
-	Entity() {};
+	Entity() : observers(std::vector<Observer*>()) {};
 	virtual ~Entity() {};
 
 	float x = 0, y = 0; // Those are game model coordinates (the game model is on a 2D space)
@@ -36,6 +45,11 @@ public:
 		but stuff like projectiles can not be collidable. Even if they can collide on other entities.
 	*/
 	bool collidable = false;
+
+	/**
+		List of observers	
+	*/
+	std::vector<Observer*> observers;
 
 protected:
 	// Info, subclass sandbox can help decoupling. Ex: we can put static Game* game; and access the game from every entity
