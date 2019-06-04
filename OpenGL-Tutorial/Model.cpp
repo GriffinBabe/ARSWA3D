@@ -196,6 +196,7 @@ Mesh Model::processMesh(aiMesh * mesh, const aiScene * scene)
 
 	}
 
+
 	return Mesh(vertices, indices, textures);
 }
 

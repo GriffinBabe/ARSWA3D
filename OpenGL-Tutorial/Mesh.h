@@ -1,6 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
+#define JOINT_PER_VERTEX;
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -24,11 +25,32 @@
 */
 
 struct Vertex {
+
 	glm::vec3 Position;
 	glm::vec3 Normal;
 	glm::vec2 TexCoords;
 	glm::vec3 Bitangent;
 	glm::vec3 Tangent;
+
+	int[JOINT_PER_VERTEX] boneIds = { 0 };
+	float[JOINT_PER_VERTEX] boneWeigths = { 0 };
+
+	void addBoneId(int id) {
+		for (int i = 0; i < JOINT_PER_VERTEX; i++) {
+			if (boneIds[i] == 0) {
+				bonesIds[i] == id;
+			}
+		}
+	}
+
+	void addBoneWeigth(float w) {
+		for (int i = 0; i < JOINT_PER_VERTEX; i++) {
+			if (boneWei[i] == 0) {
+				bonesIds[i] == id;
+			}
+		}
+	}
+
 };
 
 struct Texture {
@@ -46,7 +68,7 @@ public:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
-
+	
 	void draw(Shader* shader);
 protected:
 	unsigned int VAO, VBO, EBO;

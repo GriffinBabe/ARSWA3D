@@ -31,14 +31,16 @@ public:
 	void addEntity(Entity* entity);
 
 	void onNotify(Entity& entitiy, EEvent event) override;
-private:
+protected:
+	std::string directory;
+
+protected:
 
 	std::vector<Texture> textures_loaded;
 	std::vector<Mesh> meshes;
 	//std::string directory;
 	bool gammaCorrection;
 
-	std::string directory;
 
 	std::vector<Entity*> entities;
 

@@ -1,14 +1,22 @@
 #include "AnimatedMesh.h"
 
 
-AnimatedMesh::AnimatedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Joint rootJoint, int jointCount)
-	: Mesh(vertices, indices, textures), animator(Animator(this)), rootJoint(rootJoint)
+AnimatedMesh::AnimatedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount)
+	: Mesh(vertices, indices, textures), animator(Animator(this)), jointCount(jointCount)
 {
-	rootJoint.calcInverseBindTransform(glm::mat4());
+
 }
 
 AnimatedMesh::~AnimatedMesh()
 {
+}
+
+void AnimatedMesh::setRootJoint(Joint * root)
+{
+	if (rootJoint == nullptr) {
+		rootJoint = root;
+		rootJoint->calcInverseBindTransform(glm::mat4());
+	}
 }
 
 void AnimatedMesh::update(float delta_time)
@@ -67,4 +75,31 @@ void AnimatedMesh::addJointsToArray(Joint headJoint, std::vector<glm::mat4> join
 	for (Joint childJoint : headJoint.children) {
 		addJointsToArray(childJoint, jointMatrices);
 	}
+}
+
+const glm::mat4 AnimatedMesh::convertMatrix(const aiMatrix4x4 & matrix)
+{
+	glm::mat4 glmMatrice;
+
+	glmMatrice[0][0] = matrix.a1;
+	glmMatrice[0][1] = matrix.a2;
+	glmMatrice[0][2] = matrix.a3;
+	glmMatrice[0][3] = matrix.a4;
+
+	glmMatrice[1][0] = matrix.b1;
+	glmMatrice[1][1] = matrix.b2;
+	glmMatrice[1][2] = matrix.b3;
+	glmMatrice[1][3] = matrix.b4;
+
+	glmMatrice[2][0] = matrix.c1;
+	glmMatrice[2][1] = matrix.c2;
+	glmMatrice[2][2] = matrix.c3;
+	glmMatrice[2][3] = matrix.c4;
+
+	glmMatrice[3][0] = matrix.d1;
+	glmMatrice[3][1] = matrix.d2;
+	glmMatrice[3][2] = matrix.d3;
+	glmMatrice[3][3] = matrix.d4;
+
+	return glm::mat4();
 }

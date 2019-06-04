@@ -21,4 +21,3 @@ public:
 	float getLength() { return length; }
 	const std::vector<KeyFrame>& getKeyFrames() { return keyFrames; }
 };
-
