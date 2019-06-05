@@ -47,8 +47,9 @@ protected:
 
 	unsigned int TextureFromFile(const char* path, std::string &directory);
 
-	void loadModel(std::string path);
-	void processNode(aiNode *node, const aiScene *scene);
+	virtual void loadModel(std::string path);
+	virtual void processNode(aiNode *node, const aiScene *scene);
+
 	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 											  std::string TypeName);

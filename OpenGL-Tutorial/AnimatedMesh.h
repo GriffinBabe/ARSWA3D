@@ -42,6 +42,7 @@ public:
 	void doAnimation();
 
 	static glm::mat4 convertMatrix(const aiMatrix4x4 & matrix);
+
 private:
 
 	
@@ -60,6 +61,6 @@ private:
 	Joint* rootJoint;
 	int jointCount;
 
-	void addJointsToArray(Joint headJoint, std::vector<glm::mat4> jointMatrices);
+	void addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices);
 };
 

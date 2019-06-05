@@ -1,7 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
-#define JOINT_PER_VERTEX;
+#define JOINT_PER_VERTEX 3
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
@@ -32,21 +32,21 @@ struct Vertex {
 	glm::vec3 Bitangent;
 	glm::vec3 Tangent;
 
-	int[JOINT_PER_VERTEX] boneIds = { 0 };
-	float[JOINT_PER_VERTEX] boneWeigths = { 0 };
+	int boneIds[JOINT_PER_VERTEX] = { 0 };
+	float boneWeigths[JOINT_PER_VERTEX] = { 0 };
 
 	void addBoneId(int id) {
 		for (int i = 0; i < JOINT_PER_VERTEX; i++) {
 			if (boneIds[i] == 0) {
-				bonesIds[i] == id;
+				boneIds[i] = id;
 			}
 		}
 	}
 
 	void addBoneWeigth(float w) {
 		for (int i = 0; i < JOINT_PER_VERTEX; i++) {
-			if (boneWei[i] == 0) {
-				bonesIds[i] == id;
+			if (boneWeigths[i] == 0) {
+				boneWeigths[i] = w;
 			}
 		}
 	}

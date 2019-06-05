@@ -16,15 +16,6 @@ public:
 private:
 	std::vector<AnimatedMesh> meshes;
 
-	/**
-		Overiddes the Model::loadModel() function as we also need to import animation.
-	*/
-	void loadModel(const std::string &path);
-
-	/**
-		Same as Model::processNode, but the method will call an AnimatedModel function.
-	*/
-	void processNode(aiNode* node, const aiScene* scene);
 
 	/**
 		Same as Model::processMesh, but the method will call an AnimatedModel function.

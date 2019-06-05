@@ -69,15 +69,15 @@ void AnimatedMesh::doAnimation()
 {
 }
 
-void AnimatedMesh::addJointsToArray(Joint headJoint, std::vector<glm::mat4> jointMatrices)
+void AnimatedMesh::addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices)
 {
-	jointMatrices[headJoint.index] = headJoint.getAnimatedTransform();
-	for (Joint childJoint : headJoint.children) {
-		addJointsToArray(childJoint, jointMatrices);
+	jointMatrices[headJoint->index] = headJoint->getAnimatedTransform();
+	for (Joint childJoint : headJoint->children) {
+		addJointsToArray(&childJoint, jointMatrices);
 	}
 }
 
-const glm::mat4 AnimatedMesh::convertMatrix(const aiMatrix4x4 & matrix)
+glm::mat4 AnimatedMesh::convertMatrix(const aiMatrix4x4 & matrix)
 {
 	glm::mat4 glmMatrice;
 
