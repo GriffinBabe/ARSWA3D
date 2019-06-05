@@ -8,7 +8,7 @@ std::vector<Model*> ModelList::loadedModels;
 
 void ModelList::Init()
 {
-	witch = new Model("Models/witch/witch-toon2.obj", 0.0f, 0.42f);
+	witch = new AnimatedModel("Models/witch/witch-toon.dae", 0.0f, 0.42f);
 	loadedModels.push_back(witch);
 	roof = new Model("Models/platform/roof.obj", 0.0f, 0.0f);
 	loadedModels.push_back(roof);
