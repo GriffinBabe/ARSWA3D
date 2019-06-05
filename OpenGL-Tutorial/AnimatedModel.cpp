@@ -4,7 +4,7 @@
 AnimatedModel::AnimatedModel(std::string path, float x_off, float y_off)
 	: Model(path,x_off,y_off), meshes(std::vector<AnimatedMesh>()), boneMap(std::map<std::string,unsigned int>())
 {
-	loadModelAnimations(path);
+	loadModel(path);
 }
 
 AnimatedModel::AnimatedModel()
@@ -133,11 +133,14 @@ AnimatedMesh AnimatedModel::processMesh(aiMesh * mesh, const aiScene * scene)
 
 	}
 
-	std::vector<Joint> meshJoints = processBones(mesh); // get all the bones from the mesh
+	// get all the bones from the mesh and sets them into our vector and map
+	// set all the right boneID and weights to the right indices.
+	std::vector<Joint> meshJoints = processBones(vertices, mesh);
+
+	// Builds new Joints from our temporary meshJoints list.
+	Joint rootJoint = buildBoneHierarchy(vertices, meshJoints, scene);
 
 	AnimatedMesh nmesh(vertices, indices, textures, meshJoints);
-	buildBoneHierarchy(vertices.size(), meshJoints, scene, nmesh);
-
 
 
 	// TODO: set the vertices joint ids and weights.
@@ -169,7 +172,7 @@ std::vector<Joint> AnimatedModel::processBones(std::vector<Vertex>& vertices, ai
 	return std::vector<Joint>();
 }
 
-void AnimatedModel::buildBoneHierarchy(const std::vector<Vertex>& vertices, const std::vector<Joint>& joints, const aiScene * scene, AnimatedMesh& mesh)
+Joint AnimatedModel::buildBoneHierarchy(const std::vector<Vertex>& vertices, const std::vector<Joint>& joints, const aiScene * scene)
 {
 	aiNode* rootBone;
 
@@ -195,29 +198,38 @@ void AnimatedModel::buildBoneHierarchy(const std::vector<Vertex>& vertices, cons
 		return;
 	}
 
-	std::vector<Joint>::iterator it = joints.begin();
-	
-	recursiveBoneHierarchy(vertices, joints, );
+	// Gets the root joint from the map
+	Joint rootJoint = joints[boneMap[rootBone->mName.data]];
 
+	// We build the hierarchy from our joint vector and jointMap. 
+	// We do not use the references to the joints vector elements but we copy them
+	// and add them to the respective joint's children (I hope this is clear lol)
+	//
+	// The given rootJoint will be our rootJoint filled with other children joints,
+	// each children joint can have also his children joint etc...
+	recursiveBoneHierarchy(vertices, joints, rootJoint, rootBone);
+
+	return rootJoint;
+	
 }
 
 void AnimatedModel::recursiveBoneHierarchy(const std::vector<Vertex>& vertices,
 	const std::vector<Joint>& joints, Joint& parentJoint, aiNode * boneNode)
 {
 	std::string name = boneNode->mName.data;
-	// Checks if the given node is a bone
+	// Checks if the given node is a bone we registered earlier
 	if (boneMap.find(name) != boneMap.end()) {
 		// at this point we know boneNode is a Joint
 		// trough our boneMap, we know the id of the joint from the boneNode name.
 		unsigned int boneId = boneMap[name];
-		// We set the vertex bone id and weight
 		
+		Joint childrenJoint = joints.at(boneId);
+		for (unsigned int i = 0; i < boneNode->mNumChildren; i++) {
+			recursiveBoneHierarchy(vertices, joints, childrenJoint, boneNode->mChildren[i]);
+		}
+
 		// We use that id to find the bone and sets it to the parentJoint childrens
-		parentJoint.addChild(joints[boneId]);
-
+		// Adds the children joint to the parent joint
+		parentJoint.addChild(childrenJoint);
 	}
-
-
-	joints[boneMap[]]
-	return std::vector<Joint>();
 }

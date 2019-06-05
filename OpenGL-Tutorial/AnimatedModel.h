@@ -48,15 +48,15 @@ private:
 		Credit for this solution: 
 		https://stackoverflow.com/questions/51225072/construct-assimp-bone-hierarchy-beginning-at-the-root
 	*/
-	void buildBoneHierarchy(const std::vector<Vertex>& vertices, const std::vector<Joint>& joints, 
-		const aiScene* scene, AnimatedMesh& mesh);
+	Joint buildBoneHierarchy(const std::vector<Vertex>& vertices, const std::vector<Joint>& joints, 
+		const aiScene* scene);
 
 
 	/**
-		Recursievely adds to our joint they're childrens.
+		Recursievely adds to our joint they're childrens.	
 	*/
 	void recursiveBoneHierarchy(const std::vector<Vertex>& vertices, 
-		const std::vector<Joint>& joints, Joint& parentJoint, aiNode* boneNode);
+		const	std::vector<Joint>& joints, Joint& parentJoint, aiNode* boneNode);
 
 	/**
 		boneMap, very usefull in recursiveBoneHierarchy and processBone methods to
