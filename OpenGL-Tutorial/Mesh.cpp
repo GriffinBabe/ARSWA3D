@@ -1,8 +1,8 @@
 #include "Mesh.h"
 
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
-	: vertices(vertices), indices(indices), textures(textures)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount)
+	: vertices(vertices), indices(indices), textures(textures), jointCount(jointCount)
 {
 	setupMesh();
 }
@@ -77,3 +77,24 @@ void Mesh::setupMesh()
 	// Gives the data into our shader as the third layer of data
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
 }
+
+
+std::vector<glm::mat4> Mesh::getJointTransform()
+{
+	std::vector<glm::mat4> jointMatrices;
+	addJointsToArray(rootJoint, jointMatrices);
+	return jointMatrices;
+}
+
+void Mesh::doAnimation()
+{
+}
+
+void Mesh::addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices)
+{
+	jointMatrices[headJoint->index] = headJoint->getAnimatedTransform();
+	for (Joint childJoint : headJoint->children) {
+		addJointsToArray(&childJoint, jointMatrices);
+	}
+}
+

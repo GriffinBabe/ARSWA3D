@@ -3,56 +3,50 @@
 
 #include <vector>
 #include "Mesh.h"
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/Importer.hpp>
 #include "Shader.h"
 #include "Observer.h"
 
 class Entity;
 
-class Model : public Observer{
+class Model : public Observer {
 public: 
 
 	Model();
 
 	/**
+		Creates a model from loaded meshes.
+
+		@param meshes, the preloaded list of meshes
+	*/
+	Model(std::vector<Mesh> meshes);
+
+	/**
 		NB: x_off are the distance between the center of the mesh (ofter located at the center bottom) to
 		what we might use as the center in the model.
 	*/
-	Model(std::string path, float x_off, float y_off);
-	void draw(Shader* shader, float delta_time);
-	float x_off = 0.0f; float y_off;
+	void setOffsets(float x, float y) { x_off = x; y_off = y; }
+	float x_off = 0.0f; float y_off = 0.0f;
+
 
 	/**
-		Removes one of the entities.
+		Renders the model for each linked entity
+		
+		@param shader, the OpenGL shader we are using to render this model
+		@param delta_time, the time passed since the last game loop
+	*/
+	void draw(Shader* shader, float delta_time);
+
+	/**
+		Observer/Observable pattern implementation on game Entities.
 	*/
 	void removeEntity(Entity* entity);
 	void addEntity(Entity* entity);
-
 	void onNotify(Entity& entitiy, EEvent event) override;
-protected:
-	std::string directory;
 
 protected:
-
-	std::vector<Texture> textures_loaded;
 	std::vector<Mesh> meshes;
-	//std::string directory;
-	bool gammaCorrection;
-
-
 	std::vector<Entity*> entities;
 
-
-	unsigned int TextureFromFile(const char* path, std::string &directory);
-
-	virtual void loadModel(std::string path);
-	virtual void processNode(aiNode *node, const aiScene *scene);
-
-	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
-	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
-											  std::string TypeName);
 };
 
 #endif

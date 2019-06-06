@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL-Tutorial", "OpenGL-Tutorial\OpenGL-Tutorial.vcxproj", "{EE49E618-BF44-4C7B-9EED-39ACBD497D45}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Arswa3D-test", "Arswa3D-test\Arswa3D-test.vcxproj", "{0FC6D5A9-F798-4FAB-8807-0822511E7180}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{EE49E618-BF44-4C7B-9EED-39ACBD497D45}.Release|x64.Build.0 = Release|x64
 		{EE49E618-BF44-4C7B-9EED-39ACBD497D45}.Release|x86.ActiveCfg = Release|Win32
 		{EE49E618-BF44-4C7B-9EED-39ACBD497D45}.Release|x86.Build.0 = Release|Win32
+		{0FC6D5A9-F798-4FAB-8807-0822511E7180}.Debug|x64.ActiveCfg = Debug|x64
+		{0FC6D5A9-F798-4FAB-8807-0822511E7180}.Debug|x64.Build.0 = Debug|x64
+		{0FC6D5A9-F798-4FAB-8807-0822511E7180}.Debug|x86.ActiveCfg = Debug|Win32
+		{0FC6D5A9-F798-4FAB-8807-0822511E7180}.Debug|x86.Build.0 = Debug|Win32
+		{0FC6D5A9-F798-4FAB-8807-0822511E7180}.Release|x64.ActiveCfg = Release|x64
+		{0FC6D5A9-F798-4FAB-8807-0822511E7180}.Release|x64.Build.0 = Release|x64
+		{0FC6D5A9-F798-4FAB-8807-0822511E7180}.Release|x86.ActiveCfg = Release|Win32
+		{0FC6D5A9-F798-4FAB-8807-0822511E7180}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

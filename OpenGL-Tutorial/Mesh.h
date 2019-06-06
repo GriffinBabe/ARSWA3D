@@ -1,28 +1,20 @@
 #ifndef MESH_H
 #define MESH_H
 
-#define JOINT_PER_VERTEX 3
-
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
-#include "Shader.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <string>
 #include <vector>
 
-/*
-	NOTE on Stucts:
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 
-	Vertex vertex;
-	vertex.Position  = glm::vec3(0.2f, 0.4f, 0.6f);
-	vertex.Normal    = glm::vec3(0.0f, 1.0f, 0.0f);
-	vertex.TexCoords = glm::vec2(1.0f, 0.0f);
-	// = [0.2f, 0.4f, 0.6f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f];
+#include "Joint.h"
+#include "Shader.h"
+#include "Animator.h"
 
-	Structures have the advantage to have a sequential memory layout
-*/
+#define JOINT_PER_VERTEX 3
 
 struct Vertex {
 
@@ -62,7 +54,7 @@ struct Texture {
 class Mesh
 {
 public:
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount);
 	~Mesh();
 
 	std::vector<Vertex> vertices;
@@ -70,9 +62,43 @@ public:
 	std::vector<Texture> textures;
 	
 	void draw(Shader* shader);
-protected:
+
+	std::vector<int>& getJointIds() { return jointIds; }
+	std::vector<float>& getVertexWeigths() { return vertexWeights; }
+
+	
+	void setRootJoint(Joint* root) {rootJoint = root;}
+	std::vector<glm::mat4> getJointTransform();
+
+	/**
+		Updates the animator time.
+	*/
+	void update(float delta_time);
+	void doAnimation();
+
+
+private:
 	unsigned int VAO, VBO, EBO;
 	void setupMesh();
+
+	/**
+	The ID of the linked joint of each corresponding vertex from the vertices vector
+	There are 3 jointIds per vertex. So this array will have 3x more elements than the vertices vector
+	*/
+	std::vector<int> jointIds;
+
+
+	/**
+		Same as jointIds, but this will contain the respective weight of it.
+	*/
+	std::vector<float> vertexWeights;
+
+	Animator animator;
+	Joint* rootJoint;
+	int jointCount;
+
+	void addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices);
+
 };
 
 #endif // !MESH_H

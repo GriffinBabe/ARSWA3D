@@ -95,6 +95,7 @@ private:
 
 
 public:
+	Animator();
 	Animator(AnimatedMesh* model);
 
 	/**

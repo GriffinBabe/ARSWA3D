@@ -1,4 +1,5 @@
 #include "ModelList.h"
+#include "ModelLoader.h"
 
 Model* ModelList::witch = NULL;
 Model* ModelList::roof = NULL;
@@ -8,13 +9,23 @@ std::vector<Model*> ModelList::loadedModels;
 
 void ModelList::Init()
 {
-	witch = new AnimatedModel("Models/witch/witch-toon.dae", 0.0f, 0.42f);
+	ModelLoader* loader = ModelLoader::getInstance();
+
+	witch = loader->loadModel("Models/witch/witch-toon2.obj");
+	witch->setOffsets(0.0f, 0.42f);
 	loadedModels.push_back(witch);
-	roof = new Model("Models/platform/roof.obj", 0.0f, 0.0f);
+
+	roof = loader->loadModel("Models/platform/roof.obj");
+	roof->setOffsets(0.0f, 0.0f);
 	loadedModels.push_back(roof);
-	platform = new Model("Models/platform/platform2.obj", 0.0f, 0.05f);
+
+	platform = loader->loadModel("Models/platform/platform2.obj");
+	platform->setOffsets(0.0f, 0.0f);
 	loadedModels.push_back(platform);
-	wall = new Model("Models/platform/wall.obj", 0.0f, 0.0f);
+
+
+	wall = loader->loadModel("Models/platform/wall.obj");
+	wall->setOffsets(0.0f, 0.0f);
 	loadedModels.push_back(wall);
 }
 
@@ -30,9 +41,8 @@ ModelList::~ModelList()
 void ModelList::attachCharacter(Character* character)
 {
 	switch (character->id) {
-
-	case (WITCH):
-		ModelList::witch->addEntity(character);
-		break;
+		case (WITCH):
+			ModelList::witch->addEntity(character);
+			break;
 	}
 }

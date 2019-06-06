@@ -1,5 +1,4 @@
 #include "Animator.h"
-#include "AnimatedMesh.h"
 
 bool Animator::increaseAnimationTime(float delta_time)
 {
@@ -70,6 +69,10 @@ void Animator::applyPoseToJoints(std::map<std::string, glm::mat4> const& current
 	currentTransform = glm::matrixCompMult(currentTransform, joint.getInverseBindTransform());
 	joint.setAnimationTransform(currentTransform);
 
+}
+
+Animator::Animator()
+{
 }
 
 Animator::Animator(AnimatedMesh * model)

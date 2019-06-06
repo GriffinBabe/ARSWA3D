@@ -2,7 +2,6 @@
 #define MODELLIST_H
 
 #include "Model.h"
-#include "AnimatedModel.h"
 #include "Character.h"
 
 class ModelList 
