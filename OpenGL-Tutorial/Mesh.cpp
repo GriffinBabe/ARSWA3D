@@ -1,8 +1,8 @@
 #include "Mesh.h"
 
 
-Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount)
-	: vertices(vertices), indices(indices), textures(textures), jointCount(jointCount)
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures)
+	: vertices(vertices), indices(indices), textures(textures)
 {
 	setupMesh();
 }
@@ -79,18 +79,23 @@ void Mesh::setupMesh()
 }
 
 
-std::vector<glm::mat4> Mesh::getJointTransform()
+std::vector<glm::mat4> RiggedMesh::getJointTransform()
 {
 	std::vector<glm::mat4> jointMatrices;
 	addJointsToArray(rootJoint, jointMatrices);
 	return jointMatrices;
 }
 
-void Mesh::doAnimation()
+RiggedMesh::RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount)
+	: Mesh(vertices, indices, textures), jointCount(jointCount)
 {
 }
 
-void Mesh::addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices)
+void RiggedMesh::doAnimation()
+{
+}
+
+void RiggedMesh::addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices)
 {
 	jointMatrices[headJoint->index] = headJoint->getAnimatedTransform();
 	for (Joint childJoint : headJoint->children) {

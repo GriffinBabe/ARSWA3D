@@ -6,8 +6,6 @@
 #include <map>
 
 #include "Model.h"
-#include "AnimatedModel.h"
-
 
 
 /**
@@ -21,6 +19,7 @@ class ModelLoader
 {
 
 public:
+
 	static ModelLoader* getInstance();
 
 	/**
@@ -50,12 +49,12 @@ private:
 		Process a node, is a recursive method that will call processMesh for each mesh in the file
 		The method is overriden in the ModelLoader class as the behaviour is a little different.
 	*/
-	void processNode(std::vector<Mesh>& meshes, aiNode *node, const aiScene *scene);
+	void processNode(std::vector<Mesh*>& meshes, aiNode *node, const aiScene *scene);
 
 	/**
 		Loads a mesh, preparing all vertices, indices and texture arrays.
 	*/
-	Mesh processMesh(aiMesh *mesh, const aiScene *scene);
+	Mesh* processMesh(aiMesh *mesh, const aiScene *scene);
 
 
 	std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
@@ -102,5 +101,14 @@ private:
 		@return, the converted glm::mat4 matrice
 	*/
 	static glm::mat4 convertMatrix(const aiMatrix4x4 & matrix);
+
+
+	/**
+		Checks if the model we want to load is a rigged model or
+		a simple animationless model.
+
+		@return the rootJoint node if it exists, a null pointer if it doesn't exits.
+	*/
+	aiNode* getRootJoint(const aiScene* scene);
 };
 

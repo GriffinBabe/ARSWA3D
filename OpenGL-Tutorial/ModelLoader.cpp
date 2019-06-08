@@ -1,4 +1,5 @@
 #include "ModelLoader.h"
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 ModelLoader* ModelLoader::instance = nullptr;
@@ -96,47 +97,109 @@ Model * ModelLoader::loadModel(const std::string& path)
 	}
 	directory = path.substr(0, path.find_last_of('/'));
 
-	std::vector<Mesh> meshes;
+
+	std::vector<Mesh*> meshes;
 
 	processNode(meshes, scene->mRootNode, scene);
 
-	return new Model(meshes);
+	std::vector<Mesh> meshes2;
+	for (Mesh* m : meshes) {
+		meshes2.push_back(*m);
+		delete m;
+	}
+
+	return new Model(meshes2);
 }
 
-void ModelLoader::processNode(std::vector<Mesh>& meshes, aiNode * node, const aiScene * scene)
+void ModelLoader::processNode(std::vector<Mesh*>& meshes, aiNode * node, const aiScene * scene)
 {
 	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+		
 		meshes.push_back(processMesh(mesh, scene));
 	}
 	for (unsigned int i = 0; i < node->mNumChildren; i++) {
 		processNode(meshes, node->mChildren[i], scene);
 	}
 }
-Mesh ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
+
+Mesh* ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
 {
-	// Not a very optimised way, might check later if
-	// it causes big performance issues or not.
-	// Creates a dummy mesh and take the 
-	Mesh dummyMesh = ModelLoader::processMesh(mesh, scene);
-	std::vector<Vertex> vertices = dummyMesh.vertices;
-	std::vector<unsigned int> indices = dummyMesh.indices;
-	std::vector<Texture> textures = dummyMesh.textures;
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<Texture> textures;
 
-	// get all the bones from the mesh and sets them into our vector and map
-	// set all the right boneID and weights to the right indices.
-	std::vector<Joint> meshJoints = processBones(vertices, mesh);
+	for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+		Vertex vertex;
 
-	// Builds new Joints from our temporary meshJoints list.
-	Joint rootJoint = buildBoneHierarchy(vertices, meshJoints, scene);
+		glm::vec3 vector;
+		vector.x = mesh->mVertices[i].x;
+		vector.y = mesh->mVertices[i].y;
+		vector.z = mesh->mVertices[i].z;
+		vertex.Position = vector;
 
-	Mesh nmesh(vertices, indices, textures, meshJoints.size());
+		vector.x = mesh->mNormals[i].x;
+		vector.y = mesh->mNormals[i].y;
+		vector.z = mesh->mNormals[i].z;
+		vertex.Normal = vector;
 
+
+		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+		{
+			glm::vec2 vec;
+			vec.x = mesh->mTextureCoords[0][i].x;
+			vec.y = mesh->mTextureCoords[0][i].y;
+			vertex.TexCoords = vec;
+		}
+		else {
+			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
+		}
+
+		vector.x = mesh->mTangents[i].x;
+		vector.y = mesh->mTangents[i].y;
+		vector.z = mesh->mTangents[i].z;
+		vertex.Tangent = vector;
+		// bitangent
+		vector.x = mesh->mBitangents[i].x;
+		vector.y = mesh->mBitangents[i].y;
+		vector.z = mesh->mBitangents[i].z;
+		vertex.Bitangent = vector;
+
+		vertices.push_back(vertex);
+	}
+
+	for (unsigned int i = 0; i < mesh->mNumFaces; i++) {
+		aiFace face = mesh->mFaces[i];
+		for (unsigned int j = 0; j < face.mNumIndices; j++) {
+			indices.push_back(face.mIndices[j]);
+		}
+	}
+
+	if (mesh->mMaterialIndex >= 0)
+	{
+		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+		std::vector<Texture> diffuseMaps = loadMaterialTextures(material,
+			aiTextureType_DIFFUSE, "texture_diffuse");
+		textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+		std::vector<Texture> specularMaps = loadMaterialTextures(material,
+			aiTextureType_SPECULAR, "texture_specular");
+		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+	}
+
+	if (getRootJoint(scene)!=nullptr) {
+		// get all the bones from the mesh and sets them into our vector and map
+		// set all the right boneID and weights to the right indices.
+		std::vector<Joint> meshJoints = processBones(vertices, mesh);
+		// Builds new Joints from our temporary meshJoints list.
+		Joint rootJoint = buildBoneHierarchy(vertices, meshJoints, scene);
+		return new RiggedMesh(vertices, indices, textures, meshJoints.size());
+	}
+	else {
+		return new Mesh(vertices, indices, textures);
+	}
 
 	// TODO: set the vertices joint ids and weights.
-
-
-	return nmesh;
 }
 
 std::vector<Joint> ModelLoader::processBones(std::vector<Vertex>& vertices, aiMesh* mesh)
@@ -166,40 +229,24 @@ Joint ModelLoader::buildBoneHierarchy(const std::vector<Vertex>& vertices, const
 {
 	aiNode* rootBone = nullptr;
 
-	for (unsigned int i = 0; i < scene->mRootNode->mNumChildren; i++) {
-		aiNode* node = scene->mRootNode->mChildren[i];
-		if (boneMap.find(node->mName.data) != boneMap.end()) {
-			aiNode* parent = node->mParent;
-			if (parent) {
-				if (boneMap.find(parent->mName.data) == boneMap.end()) {
-					// We found the root node
-					rootBone = parent;
-				}
-				else {
-					// This isn't the root node
-					continue;
-				}
-			}
-		}
-	}
-
+	rootBone = getRootJoint(scene);
+	
 	if (!rootBone) {
 		throw std::exception("Couldn't find the root bone in mesh.");
 	}
+	else {
+		// Gets the root joint from the map
+		Joint rootJoint = joints[boneMap[rootBone->mName.data]];
 
-	// Gets the root joint from the map
-	Joint rootJoint = joints[boneMap[rootBone->mName.data]];
-
-	// We build the hierarchy from our joint vector and jointMap. 
-	// We do not use the references to the joints vector elements but we copy them
-	// and add them to the respective joint's children (I hope this is clear lol)
-	//
-	// The given rootJoint will be our rootJoint filled with other children joints,
-	// each children joint can have also his children joint etc...
-	recursiveBoneHierarchy(vertices, joints, rootJoint, rootBone);
-
-	return rootJoint;
-
+		// We build the hierarchy from our joint vector and jointMap. 
+		// We do not use the references to the joints vector elements but we copy them
+		// and add them to the respective joint's children (I hope this is clear lol)
+		//
+		// The given rootJoint will be our rootJoint filled with other children joints,
+		// each children joint can have also his children joint etc...
+		recursiveBoneHierarchy(vertices, joints, rootJoint, rootBone);
+		return rootJoint;
+	}
 }
 
 void ModelLoader::recursiveBoneHierarchy(const std::vector<Vertex>& vertices,
@@ -249,4 +296,26 @@ glm::mat4 ModelLoader::convertMatrix(const aiMatrix4x4 & matrix)
 	glmMatrice[3][3] = matrix.d4;
 
 	return glm::mat4();
+}
+
+aiNode * ModelLoader::getRootJoint(const aiScene* scene)
+{
+	aiNode* rootBone = nullptr;
+	for (unsigned int i = 0; i < scene->mRootNode->mNumChildren; i++) {
+		aiNode* node = scene->mRootNode->mChildren[i];
+		if (boneMap.find(node->mName.data) != boneMap.end()) {
+			aiNode* parent = node->mParent;
+			if (parent) {
+				if (boneMap.find(parent->mName.data) == boneMap.end()) {
+					// We found the root node
+					rootBone = parent;
+				}
+				else {
+					// This isn't the root node
+					continue;
+				}
+			}
+		}
+	}
+	return rootBone;
 }

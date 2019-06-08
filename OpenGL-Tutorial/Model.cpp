@@ -1,6 +1,6 @@
 #include "Model.h"
 #include "Entity.h"
-#define STB_IMAGE_IMPLEMENTATION
+
 
 Model::Model() : meshes(std::vector<Mesh>()), entities(std::vector<Entity*>())
 {

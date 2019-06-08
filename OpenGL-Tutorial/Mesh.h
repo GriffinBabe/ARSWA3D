@@ -54,21 +54,23 @@ struct Texture {
 class Mesh
 {
 public:
-	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount);
-	~Mesh();
-
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
+	~Mesh();	
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
-	
 	void draw(Shader* shader);
 
-	std::vector<int>& getJointIds() { return jointIds; }
-	std::vector<float>& getVertexWeigths() { return vertexWeights; }
+private:
+	unsigned int VAO, VBO, EBO;
+	void setupMesh();
+};
 
-	
-	void setRootJoint(Joint* root) {rootJoint = root;}
-	std::vector<glm::mat4> getJointTransform();
+class RiggedMesh : public Mesh {
+
+public:
+
+	RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount);
 
 	/**
 		Updates the animator time.
@@ -76,17 +78,19 @@ public:
 	void update(float delta_time);
 	void doAnimation();
 
+	std::vector<int>& getJointIds() { return jointIds; }
+	std::vector<float>& getVertexWeigths() { return vertexWeights; }
+
+
+	void setRootJoint(Joint* root) { rootJoint = root; }
+	std::vector<glm::mat4> getJointTransform();
 
 private:
-	unsigned int VAO, VBO, EBO;
-	void setupMesh();
-
 	/**
-	The ID of the linked joint of each corresponding vertex from the vertices vector
-	There are 3 jointIds per vertex. So this array will have 3x more elements than the vertices vector
+		The ID of the linked joint of each corresponding vertex from the vertices vector
+		There are 3 jointIds per vertex. So this array will have 3x more elements than the vertices vector
 	*/
 	std::vector<int> jointIds;
-
 
 	/**
 		Same as jointIds, but this will contain the respective weight of it.
@@ -98,7 +102,6 @@ private:
 	int jointCount;
 
 	void addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices);
-
 };
 
 #endif // !MESH_H
