@@ -1,4 +1,6 @@
-#pragma once
+#ifndef COMMAND_H
+#define COMMAND_H
+
 #include "Mob.h"
 
 class Game;
@@ -36,3 +38,4 @@ public:
 	void execute();
 };
 
+#endif

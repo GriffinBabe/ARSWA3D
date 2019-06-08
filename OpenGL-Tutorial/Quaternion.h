@@ -1,4 +1,6 @@
-#pragma once
+#ifndef QUATERNION_H
+
+#define QUATERNION_H
 
 #include <glm/glm.hpp>
 
@@ -29,3 +31,5 @@ private:
 	float x, y, z, w;
 };
 
+
+#endif // ! QUATERNION_H

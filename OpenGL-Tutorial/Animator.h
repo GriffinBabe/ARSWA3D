@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANIMATOR_H
+#define ANIMATOR_H
 
 #include "Animation.h"
 #include "Joint.h"
@@ -117,3 +118,5 @@ inline std::vector<TK> Animator::extract_keys(std::map<TK, TV> const & input_map
 	}
 	return retval;
 }
+
+#endif

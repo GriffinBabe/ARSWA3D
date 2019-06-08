@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MOVINGENTITY_H
+#define MOVINGENTITY_H
+
 #include "SolidEntity.h"
 
 /**
@@ -69,3 +71,5 @@ protected:
 	float gravity;
 
 };
+
+#endif

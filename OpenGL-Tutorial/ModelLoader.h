@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MODELLOADER_H
+#define MODELLOADER_H
+
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
@@ -112,3 +114,4 @@ private:
 	aiNode* getRootJoint(const aiScene* scene);
 };
 
+#endif

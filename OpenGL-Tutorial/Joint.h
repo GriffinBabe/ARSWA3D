@@ -1,4 +1,6 @@
-#pragma once
+#ifndef JOINT_H
+#define JOINT_H
+
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
@@ -53,3 +55,4 @@ public:
 
 };
 
+#endif

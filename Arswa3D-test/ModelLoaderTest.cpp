@@ -1,7 +1,9 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
 #include <crtdbg.h>
+
 #include "../OpenGL-Tutorial/ModelLoader.h"
+#include "../OpenGL-Tutorial/ModelLoader.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

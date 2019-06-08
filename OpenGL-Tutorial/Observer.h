@@ -1,4 +1,6 @@
-#pragma once
+#ifndef OBSERVER_H
+#define OBSERVER_H
+
 #include <vector>
 
 class Entity;
@@ -24,3 +26,5 @@ protected:
 	void notify(Entity & entity, EEvent event);
 
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ANIMATION_H
+#define ANIMATION_H
 
 #include "KeyFrame.h"
 #include <vector>
@@ -21,3 +22,5 @@ public:
 	float getLength() { return length; }
 	const std::vector<KeyFrame>& getKeyFrames() { return keyFrames; }
 };
+
+#endif ANIMATION_H

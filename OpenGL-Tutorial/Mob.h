@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOB_H
+#define MOB_H
 
 #include "MovingEntity.h"
 
@@ -37,3 +38,5 @@ protected:
 	int max_jumps;
 };
 
+
+#endif

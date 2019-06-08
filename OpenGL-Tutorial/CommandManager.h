@@ -1,4 +1,5 @@
-#pragma once
+#ifndef COMMANDMANAGER_H
+#define COMMANDMANAGER_H
 
 #include <vector>
 #include "Command.h"
@@ -22,4 +23,5 @@ public:
 
 	void addCommand(Command* com);
 };
+#endif
 

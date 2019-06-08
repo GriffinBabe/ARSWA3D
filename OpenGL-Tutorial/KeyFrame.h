@@ -1,4 +1,6 @@
-#pragma once
+#ifndef KEYFRAME_H
+#define KEYFRAME_H
+
 #include <map>
 #include <string>
 #include "JointTransform.h"
@@ -30,3 +32,5 @@ public:
 
 	float getTimeStamp() const { return timeStamp; }
 };
+
+#endif KEYFRAME_H

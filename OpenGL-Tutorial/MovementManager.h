@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MOVEMENTMANAGER_H
+#define MOVEMENTMANAGER_H
 
 #include <vector>
 #include "SolidEntity.h"
@@ -27,3 +28,4 @@ public:
 	void loop(std::vector<Entity*>* entities, float delta_time);
 };
 
+#endif

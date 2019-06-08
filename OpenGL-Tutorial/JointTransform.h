@@ -1,4 +1,5 @@
-#pragma once
+#ifndef JOINTTRANSFORM_H
+#define JOINTTRANSFORM_H
 
 #include <glm/glm.hpp>
 #include "Quaternion.h"
@@ -20,3 +21,5 @@ public:
 	static JointTransform interpolate(JointTransform frameA, JointTransform frameB, float progression);
 };
 
+
+#endif
