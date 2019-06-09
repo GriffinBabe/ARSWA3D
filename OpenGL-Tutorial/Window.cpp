@@ -128,6 +128,7 @@ void Window::game_loop() {
 			md.draw(this->shader, deltaTime);
 		}
 		
+		
 		if (game_set) {
 			for (Model* md : ModelList::loadedModels) {
 				md->draw(this->shader, deltaTime);
@@ -139,11 +140,9 @@ void Window::game_loop() {
 		this->camera->set_matrices(this->shader_collision);
 
 		if (game_set) {
-			for (SolidEntity* en : *this->game->getEntities()) {
-				this->collision_view->draw(this->shader_collision, en);
-			}
-			for (SolidEntity* en : *this->game->get_map_collidables()) {
-				this->collision_view->draw(this->shader_collision, en);
+			for (Entity* e : game->getEntities()) {
+				if (SolidEntity* s = dynamic_cast<SolidEntity*>(e))
+				collision_view->draw(this->shader_collision, s);
 			}
 		}
 		*/

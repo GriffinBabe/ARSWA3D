@@ -27,6 +27,8 @@ public:
 	*/
 	void addCommand(Command* command);
 
+	std::vector<Entity*>& getEntities() { return entities; }
+
 private:
 
 	Player* localPlayer;

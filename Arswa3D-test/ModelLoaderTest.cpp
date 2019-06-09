@@ -3,6 +3,7 @@
 #include <crtdbg.h>
 
 #include "../OpenGL-Tutorial/ModelLoader.h"
+#include "../OpenGL-Tutorial/ModelList.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -64,9 +65,11 @@ namespace Arswa3Dtest
 			ModelLoader* loader = ModelLoader::getInstance();
 			Model* model1 = loader->loadModel("Models/witch/witch-toon.dae");
 			Assert::IsNotNull(model1);
+			Assert::AreNotEqual(0,(int)model1->getMeshes()->size());
 			Mesh* mesh = model1->getMeshes()->at(0);
 			Assert::IsNotNull(dynamic_cast<RiggedMesh*>(mesh));
 		}
 
 	};
+	
 }

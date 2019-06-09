@@ -28,13 +28,18 @@ public:
 		Loads a model using Assimp.
 
 		@param pathFile, the file we want to load the model from
+		@param axisFix, transforms the model coordinates from Blender coordinates to OpenGL coordinates
 		@return the model from the given file
 	*/
-	Model* loadModel(const std::string& path);
+	Model* loadModel(const std::string& path, bool axisFix = false, float scale=1.0f);
 
 private:
 	ModelLoader();
 	static ModelLoader* instance;
+	
+	// Parameter: transform model corrdinates from Blender coordinates to OpenGL coordinates.
+	bool fixAxis = false;
+	float axisScale = 1.0f;
 
 	// Used to pass information through our functions
 	std::string directory;

@@ -149,6 +149,7 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)..\External Resources\Assimp\lib\x86;$(SolutionDir)..\External Resources\GLFW\lib-vc2015;$(SolutionDir)..\External Resources\GLEW\lib\Release\Win32;$(SolutionDir)OpenGL-Tutorial\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Animation.obj;Controller.obj;Mesh.obj;Observer.obj;SolidEntity.obj;Animator.obj;Entity.obj;Mob.obj;Window.obj;Camera.obj;Game.obj;Model.obj;glad.obj;Character.obj;Joint.obj;ModelList.obj;main.obj;CollisionView.obj;JointTransform.obj;ModelLoader.obj;Player.obj;Command.obj;KeyFrame.obj;MovementManager.obj;Quaternion.obj;CommandManager.obj;Map.obj;MovingEntity.obj;Shader.obj;assimp.lib;opengl32.lib;glew32s.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>"C:\Users\Couchard\eclipse-workspace\Opengl-test\OpenGL-Tutorial\OpenGL-Tutorial\Debug\*.obj" %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

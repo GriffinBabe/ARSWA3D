@@ -11,7 +11,7 @@ void ModelList::Init()
 {
 	ModelLoader* loader = ModelLoader::getInstance();
 
-	witch = loader->loadModel("Models/witch/witch-toon2.obj");
+	witch = loader->loadModel("Models/witch/witch-toon.dae", true, .65f);
 	witch->setOffsets(0.0f, 0.42f);
 	loadedModels.push_back(witch);
 

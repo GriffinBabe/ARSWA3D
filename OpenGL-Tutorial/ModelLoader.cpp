@@ -85,8 +85,11 @@ std::vector<Texture> ModelLoader::loadMaterialTextures(aiMaterial * mat, aiTextu
 	return textures;
 }
 
-Model * ModelLoader::loadModel(const std::string& path)
+Model * ModelLoader::loadModel(const std::string& path, bool axisFix, float scale)
 {
+	fixAxis = axisFix;
+	axisScale = scale;
+
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
@@ -135,14 +138,27 @@ Mesh* ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
 		Vertex vertex;
 
 		glm::vec3 vector;
-		vector.x = mesh->mVertices[i].x;
-		vector.y = mesh->mVertices[i].y;
-		vector.z = mesh->mVertices[i].z;
+		vector.x = mesh->mVertices[i].x * axisScale;
+		if (!fixAxis) {
+			vector.y = mesh->mVertices[i].y * axisScale;
+			vector.z = mesh->mVertices[i].z * axisScale;
+		}
+		else {
+			vector.y = mesh->mVertices[i].z * axisScale;
+			vector.z = - mesh->mVertices[i].y * axisScale;
+		}
 		vertex.Position = vector;
 
-		vector.x = mesh->mNormals[i].x;
-		vector.y = mesh->mNormals[i].y;
-		vector.z = mesh->mNormals[i].z;
+		vector.x = mesh->mNormals[i].x * axisScale;
+		if (!fixAxis) {
+			vector.y = mesh->mNormals[i].y * axisScale;
+			vector.z = mesh->mNormals[i].z * axisScale;
+		}
+		else {
+			vector.y = mesh->mNormals[i].z * axisScale;
+			vector.z = - mesh->mNormals[i].y * axisScale;
+
+		}
 		vertex.Normal = vector;
 
 
@@ -157,14 +173,26 @@ Mesh* ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
 			vertex.TexCoords = glm::vec2(0.0f, 0.0f);
 		}
 
-		vector.x = mesh->mTangents[i].x;
-		vector.y = mesh->mTangents[i].y;
-		vector.z = mesh->mTangents[i].z;
+		vector.x = mesh->mTangents[i].x * axisScale;
+		if (!fixAxis) {
+			vector.y = mesh->mTangents[i].y * axisScale;
+			vector.z = mesh->mTangents[i].z * axisScale;
+		}
+		else {
+			vector.y = mesh->mTangents[i].z * axisScale;
+			vector.z = - mesh->mTangents[i].y * axisScale;
+		}
 		vertex.Tangent = vector;
 		// bitangent
-		vector.x = mesh->mBitangents[i].x;
-		vector.y = mesh->mBitangents[i].y;
-		vector.z = mesh->mBitangents[i].z;
+		vector.x = mesh->mBitangents[i].x * axisScale;
+		if (!fixAxis) {
+			vector.y = mesh->mBitangents[i].y * axisScale;
+			vector.z = mesh->mBitangents[i].z * axisScale;
+		}
+		else {
+			vector.y = mesh->mBitangents[i].z * axisScale;
+			vector.z = - mesh->mBitangents[i].y * axisScale;
+		}
 		vertex.Bitangent = vector;
 
 		vertices.push_back(vertex);
@@ -189,18 +217,19 @@ Mesh* ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
 
 	}
 
-	if (getRootJoint(scene)!=nullptr) {
-		// get all the bones from the mesh and sets them into our vector and map
-		// set all the right boneID and weights to the right indices.
-		std::vector<Joint> meshJoints = processBones(vertices, mesh);
-		// Builds new Joints from our temporary meshJoints list.
-		Joint rootJoint = buildBoneHierarchy(vertices, meshJoints, scene);
-		return new RiggedMesh(vertices, indices, textures, meshJoints.size());
+	// Processes the bones, filling the map
+	if (mesh->mNumBones > 0) {
+		processBones(vertices, mesh);
+		if (getRootJoint(scene)!=nullptr) {
+			// get all the bones from the mesh and sets them into our vector and map
+			// set all the right boneID and weights to the right indices.
+			std::vector<Joint> meshJoints = processBones(vertices, mesh);
+			// Builds new Joints from our temporary meshJoints list.
+			Joint rootJoint = buildBoneHierarchy(vertices, meshJoints, scene);
+			return new RiggedMesh(vertices, indices, textures, meshJoints.size());
+		}
 	}
-	else {
-		return new Mesh(vertices, indices, textures);
-	}
-
+	return new Mesh(vertices, indices, textures);
 	// TODO: set the vertices joint ids and weights.
 }
 
@@ -224,7 +253,7 @@ std::vector<Joint> ModelLoader::processBones(std::vector<Vertex>& vertices, aiMe
 			}
 		}
 	}
-	return std::vector<Joint>();
+	return joints;
 }
 
 Joint ModelLoader::buildBoneHierarchy(const std::vector<Vertex>& vertices, const std::vector<Joint>& joints, const aiScene * scene)
