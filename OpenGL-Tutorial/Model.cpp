@@ -2,11 +2,11 @@
 #include "Entity.h"
 
 
-Model::Model() : meshes(std::vector<Mesh>()), entities(std::vector<Entity*>())
+Model::Model() : meshes(std::vector<Mesh*>()), entities(std::vector<Entity*>())
 {
 }
 
-Model::Model(std::vector<Mesh> meshes) : meshes(meshes), entities(std::vector<Entity*>())
+Model::Model(std::vector<Mesh*> meshes) : meshes(meshes), entities(std::vector<Entity*>())
 {
 
 }
@@ -28,7 +28,7 @@ void Model::draw(Shader * shader, float delta_time)
 		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 		shader->setMatrix4f("model", model);
 		for (unsigned int i = 0; i < meshes.size(); i++) {
-			meshes[i].draw(shader);
+			meshes[i]->draw(shader);
 		}
 	}
 }
@@ -56,4 +56,9 @@ void Model::onNotify(Entity& entitiy, EEvent event)
 	switch (event) {
 
 	}
+}
+
+std::vector<Mesh*>* Model::getMeshes()
+{
+	return &meshes;
 }

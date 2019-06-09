@@ -18,7 +18,7 @@ public:
 
 		@param meshes, the preloaded list of meshes
 	*/
-	Model(std::vector<Mesh> meshes);
+	Model(std::vector<Mesh*> meshes);
 
 	/**
 		NB: x_off are the distance between the center of the mesh (ofter located at the center bottom) to
@@ -43,8 +43,10 @@ public:
 	void addEntity(Entity* entity);
 	void onNotify(Entity& entitiy, EEvent event) override;
 
+	std::vector<Mesh*>* getMeshes();
+
 protected:
-	std::vector<Mesh> meshes;
+	std::vector<Mesh*> meshes;
 	std::vector<Entity*> entities;
 
 };

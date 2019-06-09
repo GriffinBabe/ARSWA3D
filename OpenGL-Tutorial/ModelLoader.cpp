@@ -102,13 +102,15 @@ Model * ModelLoader::loadModel(const std::string& path)
 
 	processNode(meshes, scene->mRootNode, scene);
 
+	/*
 	std::vector<Mesh> meshes2;
 	for (Mesh* m : meshes) {
 		meshes2.push_back(*m);
 		delete m;
 	}
+	*/
 
-	return new Model(meshes2);
+	return new Model(meshes);
 }
 
 void ModelLoader::processNode(std::vector<Mesh*>& meshes, aiNode * node, const aiScene * scene)

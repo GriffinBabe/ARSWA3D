@@ -3,7 +3,6 @@
 #include <crtdbg.h>
 
 #include "../OpenGL-Tutorial/ModelLoader.h"
-#include "../OpenGL-Tutorial/ModelLoader.cpp"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -58,6 +57,15 @@ namespace Arswa3Dtest
 			CrtCheckMemory check;
 			Model* model1 = loader->loadModel("Models/platform/roof.obj");
 			delete model1;
+		}
+
+		TEST_METHOD(LoadRiggedModel)
+		{
+			ModelLoader* loader = ModelLoader::getInstance();
+			Model* model1 = loader->loadModel("Models/witch/witch-toon.dae");
+			Assert::IsNotNull(model1);
+			Mesh* mesh = model1->getMeshes()->at(0);
+			Assert::IsNotNull(dynamic_cast<RiggedMesh*>(mesh));
 		}
 
 	};

@@ -61,7 +61,9 @@ public:
 	std::vector<Texture> textures;
 	void draw(Shader* shader);
 
+
 private:
+	virtual void dummyPolymorphic() {};
 	unsigned int VAO, VBO, EBO;
 	void setupMesh();
 };
@@ -102,6 +104,8 @@ private:
 	int jointCount;
 
 	void addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices);
+
+	void dummyPolymorphic() override {};
 };
 
 #endif // !MESH_H
