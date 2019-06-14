@@ -2,6 +2,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+const char* const ROOT_BONE_NAME = "root";
+
 ModelLoader* ModelLoader::instance = nullptr;
 
 ModelLoader* ModelLoader::getInstance()
@@ -276,6 +278,9 @@ Joint ModelLoader::buildBoneHierarchy(const std::vector<Vertex>& vertices, const
 		// The given rootJoint will be our rootJoint filled with other children joints,
 		// each children joint can have also his children joint etc...
 		recursiveBoneHierarchy(vertices, joints, rootJoint, rootBone);
+
+		// Warning, for the 'Witch' the root joint has the 'spine05' name, but it's children also is name 'spine05'
+		// Maybe I should force the name of the root joint to 'root'
 		return rootJoint;
 	}
 }
@@ -331,6 +336,16 @@ glm::mat4 ModelLoader::convertMatrix(const aiMatrix4x4 & matrix)
 
 aiNode * ModelLoader::getRootJoint(const aiScene* scene)
 {
+	aiNode* rootNode = scene->mRootNode;
+	aiNode* modelNode = rootNode->mChildren[0]; // In our file, the animation model is always the first element
+	for (unsigned int i = 0; i < modelNode->mNumChildren; i++) {
+		aiNode* node = modelNode->mChildren[i];
+		if (std::string(node->mName.data) == ROOT_BONE_NAME) {
+			return node;
+		}
+	}
+	return nullptr;
+	/*
 	aiNode* rootBone = nullptr;
 	for (unsigned int i = 0; i < scene->mRootNode->mNumChildren; i++) {
 		aiNode* node = scene->mRootNode->mChildren[i];
@@ -349,4 +364,6 @@ aiNode * ModelLoader::getRootJoint(const aiScene* scene)
 		}
 	}
 	return rootBone;
+	*/
 }
+

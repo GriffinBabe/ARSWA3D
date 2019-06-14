@@ -13,6 +13,7 @@ void ModelList::Init()
 
 	witch = loader->loadModel("Models/witch/witch-toon.dae", true, .65f);
 	witch->setOffsets(0.0f, 0.42f);
+	RiggedMesh* mesh = dynamic_cast<RiggedMesh*>(witch->getMeshes()->at(0));
 	loadedModels.push_back(witch);
 
 	roof = loader->loadModel("Models/platform/roof.obj");
