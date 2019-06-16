@@ -1,4 +1,5 @@
 #include "Animator.h"
+#include "Mesh.h"
 
 bool Animator::increaseAnimationTime(float delta_time)
 {
@@ -75,7 +76,7 @@ Animator::Animator()
 {
 }
 
-Animator::Animator(AnimatedMesh * model)
+Animator::Animator(RiggedMesh * model)
 {
 	this->animatedModel = model;
 }

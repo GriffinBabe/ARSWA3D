@@ -19,6 +19,7 @@ public:
 	Joint(int index, std::string name, glm::mat4 bindLocalTransform);
 	~Joint();
 
+	void setName(const char* const n) { name = std::string(n); }
 	/**
 		Adds a child to the hierarchy.
 	*/
@@ -50,7 +51,7 @@ public:
 	void calcInverseBindTransform(const glm::mat4& parentBindTranform);
 
 	const int index; // Index used as ID
-	const std::string name;
+	std::string name;
 	std::vector<Joint> children;
 
 };

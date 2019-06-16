@@ -12,6 +12,8 @@ private:
 
 public:
 
+	Animation();
+
 	/**
 		@param lengthInSeconds, the total length of the animation
 		@param frames, all the keyFrames for the animation

@@ -228,7 +228,10 @@ Mesh* ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
 			std::vector<Joint> meshJoints = processBones(vertices, mesh);
 			// Builds new Joints from our temporary meshJoints list.
 			Joint rootJoint = buildBoneHierarchy(vertices, meshJoints, scene);
-			return new RiggedMesh(vertices, indices, textures, meshJoints.size());
+			RiggedMesh* rmesh = new RiggedMesh(vertices, indices, textures, meshJoints.size());
+			rmesh->setRootJoint(new Joint(rootJoint));
+			loadAnimations(rmesh, scene);
+			return rmesh;
 		}
 	}
 	return new Mesh(vertices, indices, textures);
@@ -281,6 +284,8 @@ Joint ModelLoader::buildBoneHierarchy(const std::vector<Vertex>& vertices, const
 
 		// Warning, for the 'Witch' the root joint has the 'spine05' name, but it's children also is name 'spine05'
 		// Maybe I should force the name of the root joint to 'root'
+		
+		rootJoint.setName(ROOT_BONE_NAME);
 		return rootJoint;
 	}
 }
@@ -334,6 +339,15 @@ glm::mat4 ModelLoader::convertMatrix(const aiMatrix4x4 & matrix)
 	return glm::mat4();
 }
 
+glm::vec3 ModelLoader::convertVector(const aiVector3D & vec)
+{
+	glm::vec3 glmVec;
+	glmVec.x = vec.x;
+	glmVec.y = vec.y;
+	glmVec.z = vec.z;
+	return glmVec;
+}
+
 aiNode * ModelLoader::getRootJoint(const aiScene* scene)
 {
 	aiNode* rootNode = scene->mRootNode;
@@ -345,25 +359,50 @@ aiNode * ModelLoader::getRootJoint(const aiScene* scene)
 		}
 	}
 	return nullptr;
-	/*
-	aiNode* rootBone = nullptr;
-	for (unsigned int i = 0; i < scene->mRootNode->mNumChildren; i++) {
-		aiNode* node = scene->mRootNode->mChildren[i];
-		if (boneMap.find(node->mName.data) != boneMap.end()) {
-			aiNode* parent = node->mParent;
-			if (parent) {
-				if (boneMap.find(parent->mName.data) == boneMap.end()) {
-					// We found the root node
-					rootBone = parent;
-				}
-				else {
-					// This isn't the root node
-					continue;
-				}
-			}
-		}
-	}
-	return rootBone;
-	*/
 }
+
+void ModelLoader::loadAnimations(RiggedMesh* mesh, const aiScene * scene)
+{
+	std::map<std::string,Animation> animations;
+
+	for (unsigned int i = 0; i < scene->mNumAnimations; i++) {
+		aiAnimation* animation = scene->mAnimations[i];
+		std::string animationName = animation->mName.data;
+		std::vector<KeyFrame> frames;
+
+		float timePerFrame = 1 / animation->mTicksPerSecond;
+		float durationInSeconds = animation->mDuration * timePerFrame;
+		
+		float time = 0;
+		// mDuration is the number of ticks
+		// mTicksPerSecond is the number of ticks per second
+		for (unsigned int f = 0; f < ceil(animation->mDuration); f++) {
+			std::map<std::string, JointTransform> transformMap;
+			for (unsigned int c = 0; c < animation->mNumChannels; c++) {
+				aiNodeAnim* nodeAnim = animation->mChannels[c];
+				// The nodeAnim corresponds to JointTransform
+				// Name of the bone
+				std::string name(nodeAnim->mNodeName.data);
+				aiVector3D position = nodeAnim->mPositionKeys[f].mValue;
+				aiQuaternion rotation = nodeAnim->mRotationKeys[f].mValue;
+				Quaternion quaternion(rotation.x, rotation.y, rotation.z, rotation.w);
+				// We have the time, position, rotation from a bone
+				// We just have to fill our transformMap with a new JointTransform
+				JointTransform transform(convertVector(position), quaternion);
+				transformMap[name] = transform;
+			}
+			//  The new keyFrame
+			KeyFrame frame(time, transformMap);
+			frames.push_back(frame);
+			time += timePerFrame;
+		}
+		Animation nAnimation(durationInSeconds, frames);
+		animations[animationName] = nAnimation;
+	}
+	mesh->setAnimations(animations);
+	// Our animations vector is now complete
+	
+}
+
+
 

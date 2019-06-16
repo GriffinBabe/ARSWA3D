@@ -4,7 +4,7 @@
 #include "Animation.h"
 #include "Joint.h"
 
-class AnimatedMesh;
+class RiggedMesh;
 
 /**
 	This class contains all the functionalities to apply the animation to an AnimatedMesh.
@@ -28,7 +28,7 @@ class Animator
 
 private:
 	bool repeat = true;
-	AnimatedMesh* animatedModel = nullptr;
+	RiggedMesh* animatedModel = nullptr;
 	Animation* currentAnimation = nullptr;
 	float animationTime = 0;
 
@@ -97,7 +97,7 @@ private:
 
 public:
 	Animator();
-	Animator(AnimatedMesh* model);
+	Animator(RiggedMesh* model);
 
 	/**
 		Changes the animation to be played and resets the animation time.

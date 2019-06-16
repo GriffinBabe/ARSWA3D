@@ -87,7 +87,7 @@ std::vector<glm::mat4> RiggedMesh::getJointTransform()
 }
 
 RiggedMesh::RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount)
-	: Mesh(vertices, indices, textures), jointCount(jointCount)
+	: Mesh(vertices, indices, textures), jointCount(jointCount), animations(std::map<std::string, Animation>())
 {
 }
 

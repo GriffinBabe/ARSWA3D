@@ -26,6 +26,7 @@ public:
 		Extracts the rotation from a transformation matrix and gets the relative Quaternion out of it.
 	*/
 	static Quaternion fromMatrix(glm::mat4 matrix);
+
 	void normalize();
 private:
 	float x, y, z, w;

@@ -85,6 +85,9 @@ public:
 
 
 	void setRootJoint(Joint* root) { rootJoint = root; }
+	void setAnimations(std::map<std::string,Animation> a) { animations = a; }
+	std::map<std::string, Animation> getAnimations() { return animations; }
+
 	std::vector<glm::mat4> getJointTransform();
 
 private:
@@ -102,6 +105,8 @@ private:
 	Animator animator;
 	Joint* rootJoint;
 	int jointCount;
+
+	std::map<std::string, Animation> animations;
 
 	void addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices);
 

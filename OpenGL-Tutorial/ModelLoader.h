@@ -111,12 +111,25 @@ private:
 
 
 	/**
+		Convers an Assimp 3D vector to a glm::vec3 vector
+
+		@param, the assimp 3D vector
+		@return, the converted glm::vec3 vector
+	*/
+	static glm::vec3 convertVector(const aiVector3D & vec);
+
+	/**
 		Checks if the model we want to load is a rigged model or
 		a simple animationless model.
 
 		@return the rootJoint node if it exists, a null pointer if it doesn't exits.
 	*/
 	aiNode* getRootJoint(const aiScene* scene);
+
+
+	void loadAnimations(RiggedMesh* mesh, const aiScene* scene);
+
+
 };
 
 #endif

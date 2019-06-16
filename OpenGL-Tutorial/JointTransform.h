@@ -13,6 +13,7 @@ private:
 
 	static glm::vec3 interpolate(glm::vec3 start, glm::vec3 end, float progression);
 public:
+	JointTransform();
 	JointTransform(glm::vec3 pos, Quaternion quat);
 	~JointTransform();
 

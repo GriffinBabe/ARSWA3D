@@ -9,7 +9,7 @@ Map::Map() : entities(std::vector<Entity*>())
 	main_platform->scaleX = 1.5f;
 	main_platform->scaleY = 1.5f;
 
-	ModelList::platform->addEntity(main_platform);
+	ModelList::platform->addInstance(main_platform);
 	entities.push_back(main_platform);
 	
 	SolidEntity* upper_platform = new SolidEntity(0.0f, 3.0f, 5.0f, 0.1f);
@@ -18,7 +18,7 @@ Map::Map() : entities(std::vector<Entity*>())
 	main_platform->scaleX = 1.5f;
 	main_platform->scaleY = 1.5f;
 
-	ModelList::platform->addEntity(upper_platform);
+	ModelList::platform->addInstance(upper_platform);
 	entities.push_back(upper_platform);
 
 
@@ -27,7 +27,7 @@ Map::Map() : entities(std::vector<Entity*>())
 
 	platform_left->z = 0.5f;
 	platform_left->scaleX = 0.5f;
-	ModelList::platform->addEntity(platform_left);
+	ModelList::platform->addInstance(platform_left);
 	entities.push_back(platform_left);
 
 	SolidEntity* platform_right = new SolidEntity(2.0f, 1.5f, 2.75f, 0.1f);
@@ -35,7 +35,7 @@ Map::Map() : entities(std::vector<Entity*>())
 	platform_right->z = 0.5f;
 	platform_right->scaleX = 0.5f;
 
-	ModelList::platform->addEntity(platform_right);
+	ModelList::platform->addInstance(platform_right);
 	entities.push_back(platform_right);
 
 	Entity* back_wall = new DecorativeEntity(0.0f, 2.0f);
@@ -43,7 +43,7 @@ Map::Map() : entities(std::vector<Entity*>())
 	back_wall->z = -1.0f;
 	back_wall->scaleX = 4.0f;
 	back_wall->scaleY = 4.0f;
-	ModelList::wall->addEntity(back_wall);
+	ModelList::wall->addInstance(back_wall);
 	entities.push_back(back_wall);
 
 	Entity* left_wall = new DecorativeEntity(-4.0f, 2.0f);
@@ -53,7 +53,7 @@ Map::Map() : entities(std::vector<Entity*>())
 	left_wall->scaleX = 4.0f;
 	left_wall->scaleY = 4.0f;
 
-	ModelList::wall->addEntity(left_wall);
+	ModelList::wall->addInstance(left_wall);
 	entities.push_back(left_wall);
 
 	Entity* right_wall = new DecorativeEntity(4.0f, 2.0f);
@@ -63,7 +63,7 @@ Map::Map() : entities(std::vector<Entity*>())
 	right_wall->scaleX = 4.0f;
 	right_wall->scaleY = 4.0f;
 
-	ModelList::wall->addEntity(right_wall);
+	ModelList::wall->addInstance(right_wall);
 	entities.push_back(right_wall);
 
 	Entity* roof = new DecorativeEntity(0.0f, 4.5f);
@@ -71,7 +71,7 @@ Map::Map() : entities(std::vector<Entity*>())
 	roof->scaleY = 3.0f;
 	roof->scaleZ = 4.0f;
 
-	ModelList::roof->addEntity(roof);
+	ModelList::roof->addInstance(roof);
 	entities.push_back(roof);
 }
 

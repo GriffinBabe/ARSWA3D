@@ -12,6 +12,7 @@ void ModelList::Init()
 	ModelLoader* loader = ModelLoader::getInstance();
 
 	witch = loader->loadModel("Models/witch/witch-toon.dae", true, .65f);
+	witch->setRigged(true);
 	witch->setOffsets(0.0f, 0.42f);
 	RiggedMesh* mesh = dynamic_cast<RiggedMesh*>(witch->getMeshes()->at(0));
 	loadedModels.push_back(witch);
@@ -43,7 +44,7 @@ void ModelList::attachCharacter(Character* character)
 {
 	switch (character->id) {
 		case (WITCH):
-			ModelList::witch->addEntity(character);
+			ModelList::witch->addInstance(character);
 			break;
 	}
 }

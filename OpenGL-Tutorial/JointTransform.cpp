@@ -10,6 +10,10 @@ glm::vec3 JointTransform::interpolate(glm::vec3 start, glm::vec3 end, float prog
 	return glm::vec3(x, y, z);
 }
 
+JointTransform::JointTransform()
+{
+}
+
 JointTransform::JointTransform(glm::vec3 pos, Quaternion quat)
 {
 	position = pos;

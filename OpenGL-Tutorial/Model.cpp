@@ -2,53 +2,67 @@
 #include "Entity.h"
 
 
-Model::Model() : meshes(std::vector<Mesh*>()), entities(std::vector<Entity*>())
+Model::Model() : meshes(std::vector<Mesh*>()), instances(std::vector<ModelInstance*>()), observers(std::vector<Entity*>())
 {
+	rigged = false;
 }
 
-Model::Model(std::vector<Mesh*> meshes) : meshes(meshes), entities(std::vector<Entity*>())
+Model::Model(std::vector<Mesh*> meshes,bool rigged) : meshes(meshes), instances(std::vector<ModelInstance*>()), observers(std::vector<Entity*>()), rigged(rigged)
 {
 
 }
 
 void Model::draw(Shader * shader, float delta_time)
 {
-	for (Entity* entity : entities) {
-		glm::mat4 model = glm::mat4(1.0f);
-		if (entity != nullptr) {
-			model = glm::translate(model, glm::vec3(entity->x - x_off, entity->y - y_off, entity->z));
-			model = glm::rotate(model, glm::radians(entity->rotX), glm::vec3(1.0f, 0.0f, 0.0f));
-			model = glm::rotate(model, glm::radians(entity->rotY), glm::vec3(0.0f, 1.0f, 0.0f));
-			model = glm::rotate(model, glm::radians(entity->rotZ), glm::vec3(0.0f, 0.0f, 1.0f));
-			model = glm::scale(model, glm::vec3(entity->scaleX, entity->scaleY, entity->scaleZ));
-		}
-		else {
-			model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		}
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-		shader->setMatrix4f("model", model);
-		for (unsigned int i = 0; i < meshes.size(); i++) {
-			meshes[i]->draw(shader);
-		}
+	if (rigged) {
+		std::cout << std::endl;
+	}
+	for (ModelInstance* instance : instances) {
+		instance->draw(shader, delta_time);
 	}
 }
 
-void Model::removeEntity(Entity * entity)
+void Model::removeInstance(Entity * entity)
 {
-	entity->removeObserver(this);
 	int index = 0;
-	for (std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it, ++index) {
-		if (*it == entity) {
+	for (std::vector<ModelInstance*>::iterator it = instances.begin(); it != instances.end(); ++it, ++index) {
+		if ((**it).getEntity() == entity) {
 			break;
 		}
 	}
-	entities.erase(entities.begin() + index);
+	entity->removeObserver(instances[index]);
+	instances.erase(instances.begin() + index);
 }
 
-void Model::addEntity(Entity * entity)
+void Model::addInstance(Entity * entity)
+{
+	ModelInstance* instance;
+	if (rigged) {
+		instance = new AModelInstance(dynamic_cast<RiggedMesh*>(meshes[0]), entity, x_off, y_off);
+	}
+	else {
+		instance = new ModelInstance(meshes[0], entity, x_off, y_off);
+	}
+	instances.push_back(instance);
+	entity->addObserver(instances.back());
+}
+
+void Model::addObserver(Entity * entity)
 {
 	entity->addObserver(this);
-	entities.push_back(entity);
+	observers.push_back(entity);
+}
+
+void Model::removeObserver(Entity * entity)
+{
+	int index = 0;
+	for (std::vector<Entity*>::iterator it = observers.begin(); it != observers.end(); ++it, ++index) {
+		if ((*it) == entity) {
+			break;
+		}
+	}
+	entity->removeObserver(this);
+	observers.erase(observers.begin() + index);
 }
 
 void Model::onNotify(Entity& entitiy, EEvent event)
