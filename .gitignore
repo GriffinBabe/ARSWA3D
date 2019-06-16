@@ -1,6 +1,10 @@
 .vs/
 Debug/
 Release/
+Debug_test/
+Arswa3D-test/Debug/
+Arswa3D-test/Release/
+Arswa3D-test/Debug_test/
 OpenGL-Tutorial/Debug
 OpenGL-Tutorial/Release
 OpenGL-Tutorial/OpenGL-Tutorial.vcxproj
