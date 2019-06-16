@@ -82,13 +82,14 @@ void Mesh::setupMesh()
 std::vector<glm::mat4> RiggedMesh::getJointTransform()
 {
 	std::vector<glm::mat4> jointMatrices;
-	addJointsToArray(rootJoint, jointMatrices);
+	addJointsToArray(&rootJoint, jointMatrices);
 	return jointMatrices;
 }
 
 RiggedMesh::RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount)
 	: Mesh(vertices, indices, textures), jointCount(jointCount), animations(std::map<std::string, Animation>())
 {
+
 }
 
 void RiggedMesh::doAnimation()
@@ -103,3 +104,6 @@ void RiggedMesh::addJointsToArray(Joint* headJoint, std::vector<glm::mat4> joint
 	}
 }
 
+RiggedMesh::~RiggedMesh()
+{
+}

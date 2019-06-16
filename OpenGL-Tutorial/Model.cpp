@@ -12,6 +12,19 @@ Model::Model(std::vector<Mesh*> meshes,bool rigged) : meshes(meshes), instances(
 
 }
 
+Model::~Model()
+{
+	for (Entity* ent : observers) {
+		ent->removeObserver(this);
+	}
+	for (Mesh* mesh : meshes) {
+		delete mesh;
+	}
+	for (ModelInstance* instance : instances) {
+		delete instance;
+	}
+}
+
 void Model::draw(Shader * shader, float delta_time)
 {
 	if (rigged) {
@@ -31,6 +44,7 @@ void Model::removeInstance(Entity * entity)
 		}
 	}
 	entity->removeObserver(instances[index]);
+	delete instances[index];
 	instances.erase(instances.begin() + index);
 }
 

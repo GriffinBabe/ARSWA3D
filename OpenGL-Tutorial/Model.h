@@ -20,6 +20,7 @@ public:
 		@param meshes, the preloaded list of meshes
 	*/
 	Model(std::vector<Mesh*> meshes, bool rigged=false);
+	~Model();
 
 	void setRigged(bool r) { rigged = r; }
 

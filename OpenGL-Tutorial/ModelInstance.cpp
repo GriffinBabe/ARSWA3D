@@ -8,6 +8,7 @@ ModelInstance::ModelInstance(Mesh * mesh, Entity* entity, float x_off, float y_o
 
 ModelInstance::~ModelInstance()
 {
+	// Doesn't delete mesh as it's kept by the model
 }
 
 void ModelInstance::draw(Shader * shader, float delta_time)

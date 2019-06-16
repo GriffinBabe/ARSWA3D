@@ -55,7 +55,7 @@ class Mesh
 {
 public:
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures);
-	~Mesh();	
+	virtual ~Mesh();	
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
@@ -73,7 +73,7 @@ class RiggedMesh : public Mesh {
 public:
 
 	RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount);
-
+	virtual ~RiggedMesh() override;
 	/**
 		Updates the animator time.
 	*/
@@ -84,7 +84,7 @@ public:
 	std::vector<float>& getVertexWeigths() { return vertexWeights; }
 
 
-	void setRootJoint(Joint* root) { rootJoint = root; }
+	void setRootJoint(Joint root) { rootJoint = root; }
 	void setAnimations(std::map<std::string,Animation> a) { animations = a; }
 	std::map<std::string, Animation> getAnimations() { return animations; }
 
@@ -103,7 +103,7 @@ private:
 	std::vector<float> vertexWeights;
 
 	Animator animator;
-	Joint* rootJoint;
+	Joint rootJoint;
 	int jointCount;
 
 	std::map<std::string, Animation> animations;

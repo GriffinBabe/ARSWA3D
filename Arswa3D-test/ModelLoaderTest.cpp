@@ -56,11 +56,19 @@ namespace Arswa3Dtest
 
 		TEST_METHOD(ModelLoadingMemoryLeaking)
 		{
+			_CrtMemState statebegin;
+			_CrtMemState stateend;
+
 			ModelLoader* loader = ModelLoader::getInstance();
+			_CrtMemCheckpoint(&statebegin);
+
 			// Memory check start after the test as we don't want to take into account the ModelLoader initialisation
-			CrtCheckMemory check;
+			//CrtCheckMemory check;
 			Model* model1 = loader->loadModel("../OpenGL-Tutorial/Models/platform/roof.obj");
 			delete model1;
+			_CrtMemCheckpoint(&stateend);
+
+			Assert::AreEqual(0, _CrtMemDifference(&stateend, &statebegin, &stateend));
 		}
 
 		TEST_METHOD(LoadRiggedModel)

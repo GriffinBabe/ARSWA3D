@@ -229,7 +229,7 @@ Mesh* ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
 			// Builds new Joints from our temporary meshJoints list.
 			Joint rootJoint = buildBoneHierarchy(vertices, meshJoints, scene);
 			RiggedMesh* rmesh = new RiggedMesh(vertices, indices, textures, meshJoints.size());
-			rmesh->setRootJoint(new Joint(rootJoint));
+			rmesh->setRootJoint(rootJoint);
 			loadAnimations(rmesh, scene);
 			return rmesh;
 		}
