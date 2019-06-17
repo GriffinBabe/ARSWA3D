@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\View">
+      <UniqueIdentifier>{fc98c534-4024-47c0-bd2c-50904e6b1f04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\View">
+      <UniqueIdentifier>{b7caa72e-b925-4e9f-b7be-e726f87ebb91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Controller">
+      <UniqueIdentifier>{c074f32b-7260-490e-9565-95acaaed56fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controller">
+      <UniqueIdentifier>{f68510d2-1d23-4a6b-a263-6805740c0abc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Model">
+      <UniqueIdentifier>{40fd400c-6f33-45f8-af7e-441e678e1d83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Model">
+      <UniqueIdentifier>{9e2d03aa-a604-44ae-8ca8-da6c60cdcfc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\View\Animations">
+      <UniqueIdentifier>{eefcfe70-f7fa-4a7c-a1b6-f12ea552e56a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\View\Animations">
+      <UniqueIdentifier>{9bd00b55-8d9f-47e0-a738-e7ba9fd81f3f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelList.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidEntity.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionView.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="Mob.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="MovementManager.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="CommandManager.cpp">
+      <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="MovingEntity.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="JointTransform.cpp">
+      <Filter>Source Files\View\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Quaternion.cpp">
+      <Filter>Source Files\View\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyFrame.cpp">
+      <Filter>Source Files\View\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files\View\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Source Files\View\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Joint.cpp">
+      <Filter>Source Files\View\Animations</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Source Files\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelInstance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelList.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="SolidEntity.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionView.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="Mob.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="MovementManager.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandManager.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
+    <ClInclude Include="MovingEntity.h">
+      <Filter>Header Files\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="JointTransform.h">
+      <Filter>Header Files\View\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Quaternion.h">
+      <Filter>Header Files\View\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyFrame.h">
+      <Filter>Header Files\View\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Header Files\View\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Header Files\View\Animations</Filter>
+    </ClInclude>
+    <ClInclude Include="Joint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelInstance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+</Project>
