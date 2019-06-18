@@ -79,6 +79,11 @@ void Mesh::setupMesh()
 }
 
 
+void RiggedMesh::setRootJoint(Joint root)
+{
+	rootJoint = root;
+}
+
 std::vector<glm::mat4> RiggedMesh::getJointTransform()
 {
 	std::vector<glm::mat4> jointMatrices;

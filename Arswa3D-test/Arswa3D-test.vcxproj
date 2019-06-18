@@ -157,13 +157,14 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/../External Resources/Assimp/include;$(SolutionDir)/../External Resources/glm;$(SolutionDir)/../External Resources/GLFW/include;$(SolutionDir)/../External Resources/GLEW/include;$(SolutionDir)/../External Resources/GLAD/include;$(SolutionDir)OpenGL-Tutorial\;$(VCInstallDir)UnitTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <UseFullPaths>true</UseFullPaths>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)..\External Resources\Assimp\lib\x64;$(SolutionDir)..\External Resources\GLFW\lib-vc2015;$(SolutionDir)..\External Resources\GLEW\lib\Release\x64;$(SolutionDir)OpenGL-Tutorial\Debug;$(VCInstallDir)UnitTest\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>JointTransform.obj;ModelLoader.obj;Player.obj;Command.obj;KeyFrame.obj;MovementManager.obj;Quaternion.obj;CommandManager.obj;Map.obj;MovingEntity.obj;Shader.obj;assimp.lib;opengl32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_test|x64'">

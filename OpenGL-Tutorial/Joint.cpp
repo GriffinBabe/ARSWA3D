@@ -1,6 +1,11 @@
 #include "Joint.h"
 
-Joint::Joint(int index, std::string name, glm::mat4 bindLocalTransform) 
+Joint::Joint() : index(0), name(""), localBindTransform(glm::mat4()), children(std::vector<Joint>())
+{
+
+}
+ 
+Joint::Joint(int index, std::string name, glm::mat4 bindLocalTransform)
 	: index(index), name(name), localBindTransform(bindLocalTransform), children(std::vector<Joint>())
 {
 

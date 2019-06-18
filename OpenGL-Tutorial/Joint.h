@@ -11,11 +11,12 @@ class Joint
 private:
 
 	glm::mat4 animatedTransform;
-	const glm::mat4 localBindTransform;
+	glm::mat4 localBindTransform;
 	glm::mat4 inverseBindTransform;
 	
 
 public:
+	Joint();
 	Joint(int index, std::string name, glm::mat4 bindLocalTransform);
 	~Joint();
 
@@ -50,7 +51,7 @@ public:
 	*/
 	void calcInverseBindTransform(const glm::mat4& parentBindTranform);
 
-	const int index; // Index used as ID
+	int index = 0; // Index used as ID
 	std::string name;
 	std::vector<Joint> children;
 

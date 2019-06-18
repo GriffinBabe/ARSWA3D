@@ -84,7 +84,7 @@ public:
 	std::vector<float>& getVertexWeigths() { return vertexWeights; }
 
 
-	void setRootJoint(Joint root) { rootJoint = root; }
+	void setRootJoint(Joint root);
 	void setAnimations(std::map<std::string,Animation> a) { animations = a; }
 	std::map<std::string, Animation> getAnimations() { return animations; }
 
