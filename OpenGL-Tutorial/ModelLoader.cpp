@@ -222,6 +222,7 @@ Mesh* ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
 	// Processes the bones, filling the map
 	if (mesh->mNumBones > 0) {
 		processBones(vertices, mesh);
+		// Can't find root join for the witch
 		if (getRootJoint(scene)!=nullptr) {
 			// get all the bones from the mesh and sets them into our vector and map
 			// set all the right boneID and weights to the right indices.
