@@ -97,10 +97,6 @@ RiggedMesh::RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> i
 
 }
 
-void RiggedMesh::doAnimation()
-{
-}
-
 void RiggedMesh::addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices)
 {
 	jointMatrices[headJoint->index] = headJoint->getAnimatedTransform();

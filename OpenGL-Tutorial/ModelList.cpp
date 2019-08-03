@@ -13,7 +13,7 @@ void ModelList::Init()
 
 	witch = loader->loadModel("Models/witch/witch-toon.fbx", true, .45f);
 	witch->setRigged(true);
-	witch->setOffsets(0.0f, 0.42f);
+	witch->setOffsets(0.0f, -0.2f);
 	RiggedMesh* mesh = dynamic_cast<RiggedMesh*>(witch->getMeshes()->at(0));
 	loadedModels.push_back(witch);
 

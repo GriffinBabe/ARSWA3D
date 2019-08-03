@@ -87,6 +87,12 @@ void Animator::doAnimation(Animation* animation)
 	currentAnimation = animation;
 }
 
+void Animator::doAnimation(const std::string & name)
+{
+	animationTime = 0;
+	currentAnimation = &animatedModel->getAnimations()[name];
+}
+
 void Animator::update(float delta_time)
 {
 	if (currentAnimation == nullptr)
@@ -96,6 +102,7 @@ void Animator::update(float delta_time)
 	// If we don't want to repeat it and the loop is over, it will return false
 	if (increaseAnimationTime(delta_time)) {
 		std::map<std::string, glm::mat4> currentPose = calculateCurrentAnimationPose();
+		applyPoseToJoints(currentPose, animatedModel->getRootJoint(), glm::mat4());
 	}
 	else {
 

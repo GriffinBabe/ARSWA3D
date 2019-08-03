@@ -84,4 +84,5 @@ void Mob::jump()
 void Mob::change_direction(int direct)
 {
 	direction = direct;
+	notify(this, WALK);
 }

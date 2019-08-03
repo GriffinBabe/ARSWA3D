@@ -52,7 +52,7 @@ public:
 	void addObserver(Entity* entity);
 	void removeObserver(Entity* entity);
 
-	void onNotify(Entity& entitiy, EEvent event) override;
+	void onNotify(Entity* entitiy, EEvent event) override;
 
 	std::vector<Mesh*>* getMeshes();
 

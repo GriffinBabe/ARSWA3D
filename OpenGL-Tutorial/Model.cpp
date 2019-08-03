@@ -27,9 +27,6 @@ Model::~Model()
 
 void Model::draw(Shader * shader, float delta_time)
 {
-	if (rigged) {
-		std::cout << std::endl;
-	}
 	for (ModelInstance* instance : instances) {
 		instance->draw(shader, delta_time);
 	}
@@ -79,7 +76,7 @@ void Model::removeObserver(Entity * entity)
 	observers.erase(observers.begin() + index);
 }
 
-void Model::onNotify(Entity& entitiy, EEvent event)
+void Model::onNotify(Entity* entitiy, EEvent event)
 {
 	switch (event) {
 

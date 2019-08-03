@@ -24,18 +24,38 @@ void ModelInstance::draw(Shader * shader, float delta_time)
 	mesh->draw(shader);
 }
 
-void ModelInstance::onNotify(Entity & entity, EEvent event)
+void ModelInstance::onNotify(Entity* entity, EEvent event)
 {
+	std::cout << "On notify called!" << std::endl;
 	// TODO Define the behaviour
 }
 
 AModelInstance::AModelInstance(RiggedMesh * mesh, Entity * entity, float x_off, float y_off) : ModelInstance(mesh, entity, x_off, y_off), animator(Animator(mesh))
 {
-
+	// Copies the bones positions
+	
 }
 
 void AModelInstance::draw(Shader * shader, float delta_time)
 {
 	// Same as draw but must apply animations first
+	animator.update(delta_time);
 	ModelInstance::draw(shader, delta_time);
+}
+
+void AModelInstance::onNotify(Entity* entity, EEvent event)
+{
+	std::cout << "On notify called in Animated model instace" << std::endl;
+	RiggedMesh* rm = dynamic_cast<RiggedMesh*>(mesh);
+	Mob* mob = dynamic_cast<Mob*>(entity);
+
+	switch (event) {
+
+	case WALK:
+		if (mob->getDirection() != 0)
+			animator.doAnimation("Scene");
+		else
+			animator.doAnimation(nullptr);
+		break;
+	}
 }

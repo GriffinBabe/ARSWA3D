@@ -74,19 +74,15 @@ public:
 
 	RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount);
 	virtual ~RiggedMesh() override;
-	/**
-		Updates the animator time.
-	*/
-	void update(float delta_time);
-	void doAnimation();
-
+	
 	std::vector<int>& getJointIds() { return jointIds; }
 	std::vector<float>& getVertexWeigths() { return vertexWeights; }
 
+	Joint& getRootJoint() { return rootJoint; }
 
 	void setRootJoint(Joint root);
 	void setAnimations(std::map<std::string,Animation> a) { animations = a; }
-	std::map<std::string, Animation> getAnimations() { return animations; }
+	std::map<std::string, Animation>& getAnimations() { return animations; }
 
 	std::vector<glm::mat4> getJointTransform();
 

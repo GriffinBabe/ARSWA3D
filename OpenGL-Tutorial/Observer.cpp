@@ -17,7 +17,7 @@ void Subject::removeObserver(Observer * observer)
 	observers.erase(observers.begin() + index);
 }
 
-void Subject::notify(Entity & entity, EEvent event)
+void Subject::notify(Entity * entity, EEvent event)
 {
 	for (Observer* obs : observers) {
 		obs->onNotify(entity, event);

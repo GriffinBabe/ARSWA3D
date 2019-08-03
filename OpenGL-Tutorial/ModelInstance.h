@@ -5,6 +5,7 @@
 #include "Observer.h"
 #include "Shader.h"
 #include "Entity.h"
+#include "Mob.h"
 
 class ModelInstance : public Observer
 {
@@ -21,7 +22,7 @@ protected:
 	/**
 		Handle events from entity
 	*/
-	void onNotify(Entity& entity, EEvent event);
+	void onNotify(Entity* entity, EEvent event);
 
 
 	Entity* entity;
@@ -48,6 +49,8 @@ public:
 
 private:
 	Animator animator;
+
+	void onNotify(Entity* entity, EEvent event) override;
 };
 
 #endif //  MODELINSTANCE_H

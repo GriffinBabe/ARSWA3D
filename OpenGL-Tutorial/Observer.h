@@ -10,7 +10,7 @@ class Observer
 {
 public:
 	virtual ~Observer() {}
-	virtual void onNotify(Entity& entity, EEvent event) = 0;
+	virtual void onNotify(Entity* entity, EEvent event) = 0;
 };
 
 class Subject
@@ -23,7 +23,7 @@ private:
 	std::vector<Observer*> observers;
 
 protected:
-	void notify(Entity & entity, EEvent event);
+	void notify(Entity * entity, EEvent event);
 
 };
 

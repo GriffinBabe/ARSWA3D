@@ -105,6 +105,11 @@ public:
 	void doAnimation(Animation* animation);
 
 
+	/**
+		Changes the animation to be played and resets the animation time.
+	*/
+	void doAnimation(const std::string& name);
+
 	void update(float delta_time);
 	~Animator();
 };
