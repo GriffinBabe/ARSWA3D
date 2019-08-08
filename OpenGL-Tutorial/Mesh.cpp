@@ -106,6 +106,7 @@ void RiggedMesh::draw(Shader * shader)
 	addJointsToArray(rootJoint, jointTransforms);
 
 	shader->setMatrixVector4f("jointTransforms", jointTransforms[0], MAX_JOINTS);
+	Mesh::draw(shader);
 }
 
 void RiggedMesh::setupMesh()
