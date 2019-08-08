@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Entity.h"
 #include "Mob.h"
+#include "Animator.h"
 
 class ModelInstance : public Observer
 {

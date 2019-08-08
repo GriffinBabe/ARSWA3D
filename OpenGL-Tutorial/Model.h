@@ -38,7 +38,7 @@ public:
 		@param shader, the OpenGL shader we are using to render this model
 		@param delta_time, the time passed since the last game loop
 	*/
-	void draw(Shader* shader, float delta_time);
+	void draw(Shader* shader, Shader* shaderRigged, float delta_time);
 
 	/**
 		Observer/Observable pattern implementation for Instances.

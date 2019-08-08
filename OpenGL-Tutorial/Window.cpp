@@ -53,7 +53,8 @@ Window::Window() : models(std::vector<Model>())
 
 	// Initializes the shaders and installs them
 	this->shader = new Shader("GLSL/model_loading_vertex.c", "GLSL/model_loading_fragment.c");
-	this->shader_collision = new Shader("GLSL/collision_vertex.c", "GLSL/collision_fragment.c");
+	this->shaderCollision = new Shader("GLSL/collision_vertex.c", "GLSL/collision_fragment.c");
+	this->shaderRigged = new Shader("GLSL/rigged_vertex.c", "GLSL/model_loading_fragment.c");
 	this->camera = new Camera();
 	this->camera->adapt_perspective(this->window);
 	glEnable(GL_DEPTH_TEST); // opengl's Z buffer used so things that are behind others aren't rendered
@@ -123,26 +124,29 @@ void Window::game_loop() {
 		this->shader->use();
 		this->camera->set_matrices(this->shader);
 
+		
 		for (Model md : models) {
 			// We specifies wich Shader we use to render our triangle
-			md.draw(this->shader, deltaTime);
+			md.draw(this->shader,this->shaderRigged, deltaTime);
 		}
+		
 		
 		
 		if (game_set) {
 			for (Model* md : ModelList::loadedModels) {
-				md->draw(this->shader, deltaTime);
+				md->draw(this->shader,this->shaderRigged, deltaTime);
 			}
 		}
+		
 
 		/*
-		this->shader_collision->use();
-		this->camera->set_matrices(this->shader_collision);
+		this->shaderCollision->use();
+		this->camera->set_matrices(this->shaderCollision);
 
 		if (game_set) {
 			for (Entity* e : game->getEntities()) {
 				if (SolidEntity* s = dynamic_cast<SolidEntity*>(e))
-				collision_view->draw(this->shader_collision, s);
+				collision_view->draw(this->shaderCollision, s);
 			}
 		}
 		*/

@@ -25,10 +25,16 @@ Model::~Model()
 	}
 }
 
-void Model::draw(Shader * shader, float delta_time)
+void Model::draw(Shader * shader, Shader* shaderRigged, float deltaTime)
 {
 	for (ModelInstance* instance : instances) {
-		instance->draw(shader, delta_time);
+		if (dynamic_cast<AModelInstance*>(instance) != nullptr)
+		{
+			instance->draw(shaderRigged, deltaTime);
+		}
+		else {
+			instance->draw(shader, deltaTime);
+		}
 	}
 }
 

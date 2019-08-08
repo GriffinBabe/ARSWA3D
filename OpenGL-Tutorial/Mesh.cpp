@@ -84,25 +84,46 @@ void RiggedMesh::setRootJoint(Joint root)
 	rootJoint = root;
 }
 
-std::vector<glm::mat4> RiggedMesh::getJointTransform()
-{
-	std::vector<glm::mat4> jointMatrices;
-	addJointsToArray(&rootJoint, jointMatrices);
-	return jointMatrices;
-}
-
 RiggedMesh::RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, int jointCount)
 	: Mesh(vertices, indices, textures), jointCount(jointCount), animations(std::map<std::string, Animation>())
 {
 
 }
 
-void RiggedMesh::addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices)
+void RiggedMesh::addJointsToArray(Joint& headJoint, std::vector<glm::mat4> jointMatrices)
 {
-	jointMatrices[headJoint->index] = headJoint->getAnimatedTransform();
-	for (Joint childJoint : headJoint->children) {
-		addJointsToArray(&childJoint, jointMatrices);
+	jointMatrices[headJoint.index] = headJoint.getAnimatedTransform();
+	for (Joint& childJoint : headJoint.children) {
+		addJointsToArray(childJoint, jointMatrices);
 	}
+}
+
+void RiggedMesh::draw(Shader * shader)
+{
+	// Fills jointTransform array to set it as an uniform value
+	std::vector<glm::mat4> jointTransforms(MAX_JOINTS);
+	jointTransforms.reserve(MAX_JOINTS);
+	addJointsToArray(rootJoint, jointTransforms);
+
+	shader->setMatrixVector4f("jointTransforms", jointTransforms[0], MAX_JOINTS);
+}
+
+void RiggedMesh::setupMesh()
+{
+	Mesh::setupMesh(); // calls base method
+	// We have to set two new layers for our shader
+	// One for the jointIndices the other for the weights
+
+	// Joint Indices
+	glEnableVertexAttribArray(3);
+	// Gives the data into our shader as the fourth layer of data
+	glVertexAttribPointer(3, 3, GL_INT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneIds));
+
+	// Joint weights
+	glEnableVertexAttribArray(4);
+	// Gives the data into our shader as the fifth layer of data
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, boneWeights));
+	
 }
 
 RiggedMesh::~RiggedMesh()

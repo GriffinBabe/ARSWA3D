@@ -102,9 +102,15 @@ void Shader::setFloat(const std::string & name, float value) const
 	glUniform1f(glGetUniformLocation(program_ID, name.c_str()), value);
 }
 
-void Shader::setMatrix4f(const std::string & name, glm::mat4 transformation_matrice)
+void Shader::setMatrix4f(const std::string & name, glm::mat4 transformationMatrix)
 {
-	glUniformMatrix4fv(glGetUniformLocation(program_ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(transformation_matrice));
+	glUniformMatrix4fv(glGetUniformLocation(program_ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(transformationMatrix));
 	// GL_FALSE : we don't need to transpose the matrice
 	// value_ptr to pass the informations with this GLM built-in function
 }
+
+void Shader::setMatrixVector4f(const std::string & name, const glm::mat4& transformationMatrix, int count)
+{
+	glUniformMatrix4fv(glGetUniformLocation(program_ID, name.c_str()), count, GL_FALSE, glm::value_ptr(transformationMatrix));
+}
+

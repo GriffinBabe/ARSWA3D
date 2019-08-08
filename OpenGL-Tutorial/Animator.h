@@ -94,7 +94,6 @@ private:
 	template<typename TK, typename TV>
 	std::vector<TK> extract_keys(std::map<TK, TV> const& input_map);
 
-
 public:
 	Animator();
 	Animator(RiggedMesh* model);

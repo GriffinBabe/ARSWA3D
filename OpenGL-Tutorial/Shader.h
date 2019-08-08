@@ -28,7 +28,8 @@ public:
 	void setBool(const std::string &name, bool value) const;
 	void setInt(const std::string &name, int value) const;
 	void setFloat(const std::string &name, float value) const;
-	void setMatrix4f(const std::string &name, glm::mat4 transformation_matrice);
+	void setMatrix4f(const std::string &name, glm::mat4 transformationMatrice);
+	void setMatrixVector4f(const std::string &name, const glm::mat4& transformationMatrice, int count);
 };
 
 #endif

@@ -12,9 +12,10 @@
 
 #include "Joint.h"
 #include "Shader.h"
-#include "Animator.h"
+#include "Animation.h"
 
-#define JOINT_PER_VERTEX 3
+#define MAX_JOINTS_PER_VERTEX 3
+#define MAX_JOINTS 100
 
 struct Vertex {
 
@@ -24,11 +25,11 @@ struct Vertex {
 	glm::vec3 Bitangent;
 	glm::vec3 Tangent;
 
-	int boneIds[JOINT_PER_VERTEX] = { 0 };
-	float boneWeigths[JOINT_PER_VERTEX] = { 0 };
+	int boneIds[MAX_JOINTS_PER_VERTEX] = { 0 };
+	float boneWeights[MAX_JOINTS_PER_VERTEX] = { 0 };
 
 	void addBoneId(int id) {
-		for (int i = 0; i < JOINT_PER_VERTEX; i++) {
+		for (int i = 0; i < MAX_JOINTS_PER_VERTEX; i++) {
 			if (boneIds[i] == 0) {
 				boneIds[i] = id;
 			}
@@ -36,9 +37,9 @@ struct Vertex {
 	}
 
 	void addBoneWeigth(float w) {
-		for (int i = 0; i < JOINT_PER_VERTEX; i++) {
-			if (boneWeigths[i] == 0) {
-				boneWeigths[i] = w;
+		for (int i = 0; i < MAX_JOINTS_PER_VERTEX; i++) {
+			if (boneWeights[i] == 0) {
+				boneWeights[i] = w;
 			}
 		}
 	}
@@ -59,13 +60,14 @@ public:
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<Texture> textures;
-	void draw(Shader* shader);
+	virtual void draw(Shader* shader);
 
+protected:
+	virtual void setupMesh();
 
 private:
 	virtual void dummyPolymorphic() {};
 	unsigned int VAO, VBO, EBO;
-	void setupMesh();
 };
 
 class RiggedMesh : public Mesh {
@@ -84,7 +86,7 @@ public:
 	void setAnimations(std::map<std::string,Animation> a) { animations = a; }
 	std::map<std::string, Animation>& getAnimations() { return animations; }
 
-	std::vector<glm::mat4> getJointTransform();
+	void draw(Shader* shader) override;
 
 private:
 	/**
@@ -98,15 +100,17 @@ private:
 	*/
 	std::vector<float> vertexWeights;
 
-	Animator animator;
 	Joint rootJoint;
 	int jointCount;
 
 	std::map<std::string, Animation> animations;
 
-	void addJointsToArray(Joint* headJoint, std::vector<glm::mat4> jointMatrices);
+	void addJointsToArray(Joint& headJoint, std::vector<glm::mat4> jointMatrices);
 
 	void dummyPolymorphic() override {};
+
+protected:
+	void setupMesh() override;
 };
 
 #endif // !MESH_H

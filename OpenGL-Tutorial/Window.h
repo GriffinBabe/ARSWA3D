@@ -33,7 +33,8 @@ private:
 
 	GLFWwindow* window;
 	Shader* shader;
-	Shader* shader_collision;
+	Shader* shaderCollision;
+	Shader* shaderRigged;
 	Camera* camera;
 
 	CollisionView* collision_view;
