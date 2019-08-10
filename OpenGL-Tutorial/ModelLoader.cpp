@@ -223,7 +223,7 @@ Mesh* ModelLoader::processMesh(aiMesh * mesh, const aiScene * scene)
 	if (mesh->mNumBones > 0) {
 		processBones(vertices, mesh);
 		// Can't find root join for the witch
-		if (getRootJoint(scene)!=nullptr) {
+		if (getRootJoint(scene->mRootNode)!=nullptr) {
 			// get all the bones from the mesh and sets them into our vector and map
 			// set all the right boneID and weights to the right indices.
 			std::vector<Joint> meshJoints = processBones(vertices, mesh);
@@ -266,7 +266,7 @@ Joint ModelLoader::buildBoneHierarchy(const std::vector<Vertex>& vertices, const
 {
 	aiNode* rootBone = nullptr;
 
-	rootBone = getRootJoint(scene);
+	rootBone = getRootJoint(scene->mRootNode);
 	
 	if (!rootBone) {
 		throw std::exception("Couldn't find the root bone in mesh.");
@@ -351,12 +351,41 @@ glm::vec3 ModelLoader::convertVector(const aiVector3D & vec)
 
 aiNode * ModelLoader::getRootJoint(const aiScene* scene)
 {
+	/*
 	aiNode* rootNode = scene->mRootNode;
 	aiNode* modelNode = rootNode->mChildren[0]; // In our file, the animation model is always the first element
 	for (unsigned int i = 0; i < modelNode->mNumChildren; i++) {
 		aiNode* node = modelNode->mChildren[i];
 		if (std::string(node->mName.data) == ROOT_BONE_NAME) {
 			return node;
+		}
+	}
+	*/
+
+	aiNode* rootNode = scene->mRootNode;
+	for (unsigned int i = 0; i < rootNode->mNumChildren; i++) {
+		aiNode* node = rootNode->mChildren[i];
+		if (std::string(node->mName.data) == ROOT_BONE_NAME) {
+			return node;
+		}
+	}
+
+	return nullptr;
+}
+
+aiNode * ModelLoader::getRootJoint(aiNode * node)
+{
+	if (std::string(node->mName.data) == ROOT_BONE_NAME) {
+		return node;
+	}
+	else if (node->mNumChildren > 0) {
+		for (unsigned int i = 0; i < node->mNumChildren; i++) {
+			aiNode* children = getRootJoint(node->mChildren[i]);
+			if (children != nullptr) {
+				if (std::string(children->mName.data) == ROOT_BONE_NAME) {
+					return children;
+				}
+			}
 		}
 	}
 	return nullptr;

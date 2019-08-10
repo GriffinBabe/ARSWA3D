@@ -63,7 +63,7 @@ void Animator::applyPoseToJoints(std::map<std::string, glm::mat4> const& current
 {
 	glm::mat4 currentLocalTransform = currentPose.at(joint.name);
 	glm::mat4 currentTransform = glm::matrixCompMult(parentTransform, currentLocalTransform);
-	for (Joint childJoint : joint.children) {
+	for (Joint& childJoint : joint.children) {
 		// Recursively calls the parents
 		applyPoseToJoints(currentPose, childJoint, currentTransform);
 	}

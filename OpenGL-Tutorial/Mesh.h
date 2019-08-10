@@ -15,7 +15,7 @@
 #include "Animation.h"
 
 #define MAX_JOINTS_PER_VERTEX 3
-#define MAX_JOINTS 150
+#define MAX_JOINTS 100
 
 struct Vertex {
 

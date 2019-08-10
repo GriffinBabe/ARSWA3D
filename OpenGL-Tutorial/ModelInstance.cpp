@@ -53,7 +53,7 @@ void AModelInstance::onNotify(Entity* entity, EEvent event)
 
 	case WALK:
 		if (mob->getDirection() != 0)
-			animator.doAnimation("Scene");
+			animator.doAnimation("Stick|Walk");
 		else
 			animator.doAnimation(nullptr);
 		break;

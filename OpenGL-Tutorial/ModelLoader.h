@@ -126,6 +126,11 @@ private:
 	*/
 	aiNode* getRootJoint(const aiScene* scene);
 
+	/**
+		Recursively searches for a the root joint. The root joint necessarely
+		have to be named "root" in the blender project before model exporting.
+	*/
+	aiNode* getRootJoint(aiNode* node);
 
 	void loadAnimations(RiggedMesh* mesh, const aiScene* scene);
 

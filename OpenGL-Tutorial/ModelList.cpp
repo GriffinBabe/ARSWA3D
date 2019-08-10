@@ -11,7 +11,7 @@ void ModelList::Init()
 {
 	ModelLoader* loader = ModelLoader::getInstance();
 
-	witch = loader->loadModel("Models/witch/witch-toon.fbx", true, .45f);
+	witch = loader->loadModel("Models/witch/stick.fbx", true, .45f);
 	witch->setRigged(true);
 	witch->setOffsets(0.0f, -0.2f);
 	RiggedMesh* mesh = dynamic_cast<RiggedMesh*>(witch->getMeshes()->at(0));
