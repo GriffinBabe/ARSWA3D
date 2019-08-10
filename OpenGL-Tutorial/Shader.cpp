@@ -109,8 +109,10 @@ void Shader::setMatrix4f(const std::string & name, glm::mat4 transformationMatri
 	// value_ptr to pass the informations with this GLM built-in function
 }
 
-void Shader::setMatrixVector4f(const std::string & name, const glm::mat4& transformationMatrix, int count)
+void Shader::setMatrixVector4f(const std::string & name, int index, const glm::mat4& transformationMatrix)
 {
-	glUniformMatrix4fv(glGetUniformLocation(program_ID, name.c_str()), count, GL_FALSE, glm::value_ptr(transformationMatrix));
+	// The name of the index-st element of our uniform variable
+	std::string arrayIndexName = name+"["+std::to_string(index)+"]";
+	glUniformMatrix4fv(glGetUniformLocation(program_ID, name.c_str()), 1, GL_TRUE, glm::value_ptr(transformationMatrix));
 }
 

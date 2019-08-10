@@ -90,7 +90,7 @@ RiggedMesh::RiggedMesh(std::vector<Vertex> vertices, std::vector<unsigned int> i
 
 }
 
-void RiggedMesh::addJointsToArray(Joint& headJoint, std::vector<glm::mat4> jointMatrices)
+void RiggedMesh::addJointsToArray(Joint& headJoint, std::vector<glm::mat4>& jointMatrices)
 {
 	jointMatrices[headJoint.index] = headJoint.getAnimatedTransform();
 	for (Joint& childJoint : headJoint.children) {
@@ -105,7 +105,10 @@ void RiggedMesh::draw(Shader * shader)
 	jointTransforms.reserve(MAX_JOINTS);
 	addJointsToArray(rootJoint, jointTransforms);
 
-	shader->setMatrixVector4f("jointTransforms", jointTransforms[0], MAX_JOINTS);
+	for (int i = 0; i < jointTransforms.size(); i++) {
+		shader->setMatrixVector4f("jointTransforms", i, jointTransforms[i]);
+	}
+
 	Mesh::draw(shader);
 }
 

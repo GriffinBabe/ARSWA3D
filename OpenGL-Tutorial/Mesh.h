@@ -15,7 +15,7 @@
 #include "Animation.h"
 
 #define MAX_JOINTS_PER_VERTEX 3
-#define MAX_JOINTS 100
+#define MAX_JOINTS 150
 
 struct Vertex {
 
@@ -105,7 +105,7 @@ private:
 
 	std::map<std::string, Animation> animations;
 
-	void addJointsToArray(Joint& headJoint, std::vector<glm::mat4> jointMatrices);
+	void addJointsToArray(Joint& headJoint, std::vector<glm::mat4>& jointMatrices);
 
 	void dummyPolymorphic() override {};
 
